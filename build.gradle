@@ -35,7 +35,7 @@ dependencies {
     //데이터베이스
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
-
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     //OAuth 2.0
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
