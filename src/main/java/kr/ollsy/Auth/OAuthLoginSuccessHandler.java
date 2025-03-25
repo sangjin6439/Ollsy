@@ -2,6 +2,8 @@ package kr.ollsy.Auth;
 
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REDIRECT_URI;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -18,6 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import kr.ollsy.Jwt.JwtUtil;
 import kr.ollsy.Jwt.RefreshToken;
 import kr.ollsy.Jwt.RefreshTokenRepository;
+import kr.ollsy.Jwt.dto.LoginResponse;
 import kr.ollsy.user.User;
 import kr.ollsy.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Value("${jwt.redirect}")
-    private String REDIRECT_URL; // 프론트엔드로 Jwt 토큰을 리다이렉트할 URI
+    private String REDIRECT_URI; // 프론트엔드로 Jwt 토큰을 리다이렉트할 URI
 
     @Value("${jwt.access-token.expiration-time}")
     private long ACCESS_TOKEN_EXPIRATION_TIME; // 액세스 토큰 만료 시간
@@ -67,6 +70,7 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         // 정보 추출
         String providerId = oAuth2UserInfo.getProviderId();
         String name = oAuth2UserInfo.getName();
+        String email = oAuth2UserInfo.getEmail();
 
         User existUser = userRepository.findByProviderId(providerId);
         User user;
@@ -78,6 +82,7 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
             user = User.builder()
                     .userId(UUID.randomUUID())
                     .name(name)
+                    .email(email)
                     .provider(provider)
                     .providerId(providerId)
                     .build();
@@ -90,6 +95,7 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         }
 
         log.info("유저 이름 : {}", name);
+        log.info("유저 이름 : {}", email);
         log.info("PROVIDER : {}", provider);
         log.info("PROVIDER_ID : {}", providerId);
 
@@ -105,9 +111,17 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         // 액세스 토큰 발급
         String accessToken = jwtUtil.generateAccessToken(user.getUserId(), ACCESS_TOKEN_EXPIRATION_TIME);
 
-        // 이름, 액세스 토큰, 리프레쉬 토큰을 담아 리다이렉트
-        String encodedName = URLEncoder.encode(name, "UTF-8");
-        String redirectUri = String.format(REDIRECT_URI, encodedName, accessToken, refreshToken);
-        getRedirectStrategy().sendRedirect(request, response, redirectUri);
+        //유저 정보 및 토큰을 담아 리다이렉트
+        LoginResponse loginResponse = LoginResponse.of(
+                name,
+                user.getUserId().getMostSignificantBits(),  // UUID → Long 변환
+                email,
+                accessToken,
+                refreshToken
+        );
+        //url이 아닌 json으로 access token, refresh token을 전달
+        response.setContentType("application/json");
+        response.getWriter().write(new ObjectMapper().writeValueAsString(loginResponse));
+        response.getWriter().flush();
     }
 }

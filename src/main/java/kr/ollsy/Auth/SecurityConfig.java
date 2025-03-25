@@ -44,13 +44,11 @@ public class SecurityConfig {
                                 .requestMatchers("/**").permitAll()
                                 .anyRequest().authenticated()
                 )
-
                 .oauth2Login(oauth -> // OAuth2 로그인 기능에 대한 여러 설정의 진입점
                         oauth
                                 .successHandler(oAuthLoginSuccessHandler) // 로그인 성공 시 핸들러
                                 .failureHandler(oAuthLoginFailureHandler) // 로그인 실패 시 핸들러
                 );
-
         return httpSecurity.build();
     }
 }

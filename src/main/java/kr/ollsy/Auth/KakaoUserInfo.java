@@ -25,4 +25,8 @@ public class KakaoUserInfo implements OAuth2UserInfo {
         return (String) ((Map) attributes.get("properties")).get("nickname");
     }
 
+    @Override
+    public String getEmail() {
+        return (String) ((Map) attributes.get("kakao_account")).get("email");
+    }
 }
