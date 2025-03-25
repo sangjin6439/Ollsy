@@ -38,7 +38,7 @@ public class SecurityConfig {
                 httpBasic(HttpBasicConfigurer::disable)
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource())) // CORS 설정 추가
                 .csrf(AbstractHttpConfigurer::disable)
-                .headers(headers -> headers.disable())
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // X-Frames-Options 비활성화 -> h2 데이터베이스 콘솔 사용 가능
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 .requestMatchers("/**").permitAll()
