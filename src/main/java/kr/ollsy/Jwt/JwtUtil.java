@@ -89,7 +89,6 @@ public class JwtUtil {
             log.warn("유효하지 않은 토큰입니다.");
             //예외 처리 후 변경
             throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
-
         }
     }
 }
