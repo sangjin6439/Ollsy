@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import kr.ollsy.Jwt.dto.TokenResponse;
+import kr.ollsy.global.exception.CustomException;
+import kr.ollsy.global.exception.GlobalExceptionCode;
 import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
@@ -26,7 +28,7 @@ public class TokenServiceImpl implements TokenService {
 
         //리프레쉬 토큰이 다르거나, 만료된 경우
         if (!existRefreshToken.getToken().equals(refreshToken) || jwtUtil.isTokenExpired(refreshToken)) {
-            throw new IllegalArgumentException("401 로그인 요청 필요");
+            throw new CustomException(GlobalExceptionCode.UNAUTHORIZED);
         } else {
             accessToken = jwtUtil.generateAccessToken(UUID.fromString(userId), ACCESS_TOKEN_EXPIRATION_TIME);
         }

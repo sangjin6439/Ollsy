@@ -8,6 +8,8 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import kr.ollsy.global.exception.CustomException;
+import kr.ollsy.global.exception.GlobalExceptionCode;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
@@ -68,8 +70,7 @@ public class JwtUtil {
         } catch (JwtException | IllegalArgumentException e) {
             // 토큰이 유효하지 않은 경우
             log.warn("유효하지 않은 토큰입니다.");
-            //예외 처리 후 변경
-            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+            throw new CustomException(GlobalExceptionCode.INVALID_TOKEN);
         }
     }
 
@@ -87,8 +88,7 @@ public class JwtUtil {
         } catch (JwtException | IllegalArgumentException e) {
             // 토큰이 유효하지 않은 경우
             log.warn("유효하지 않은 토큰입니다.");
-            //예외 처리 후 변경
-            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+            throw new CustomException(GlobalExceptionCode.INVALID_REFRESH_TOKEN);
         }
     }
 }
