@@ -25,6 +25,9 @@ public class User {
     @Column(name = "name", nullable = false, length = 5) //이런 규칙들은 엔티티가 변경될 수 있는 dto로 다 옮기고 entity에 혼잡을 주지 않기
     private String name;
 
+    @Column(name = "nickname", nullable=false)
+    private String nickname;
+
     @Column(name = "email")
     private String email;
 

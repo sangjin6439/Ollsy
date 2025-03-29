@@ -23,5 +23,4 @@ public enum GlobalExceptionCode {
     private final String errorCode;         // 에러 코드
     private final String errorMessage;      // 에러 메시지
     private final HttpStatus httpStatus;    // HTTP 상태 코드
-
 }
