@@ -1,4 +1,4 @@
-package kr.ollsy.Jwt;
+package kr.ollsy.Auth.Jwt;
 
 import java.util.UUID;
 

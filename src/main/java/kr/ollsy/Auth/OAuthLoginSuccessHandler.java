@@ -1,7 +1,5 @@
 package kr.ollsy.Auth;
 
-import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.REDIRECT_URI;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -11,19 +9,18 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.Map;
 import java.util.UUID;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kr.ollsy.Jwt.JwtUtil;
-import kr.ollsy.Jwt.RefreshToken;
-import kr.ollsy.Jwt.RefreshTokenRepository;
-import kr.ollsy.Jwt.dto.LoginResponse;
+import kr.ollsy.Auth.Jwt.JwtUtil;
+import kr.ollsy.Auth.Jwt.RefreshToken;
+import kr.ollsy.Auth.Jwt.RefreshTokenRepository;
+import kr.ollsy.Auth.Jwt.dto.LoginResponse;
 import kr.ollsy.global.util.NicknameGenerator;
-import kr.ollsy.user.User;
-import kr.ollsy.user.UserRepository;
+import kr.ollsy.user.domain.User;
+import kr.ollsy.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -79,7 +76,7 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         if (existUser == null) {
             // 신규 유저인 경우
             log.info("신규 유저입니다. 등록을 진행합니다.");
-
+            
             user = User.builder()
                     .userId(UUID.randomUUID())
                     .name(name)

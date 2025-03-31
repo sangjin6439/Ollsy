@@ -1,9 +1,8 @@
-package kr.ollsy.Jwt.dto;
+package kr.ollsy.Auth.Jwt.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Builder;
-import lombok.Getter;
 
 @Builder
 public class LoginResponse {

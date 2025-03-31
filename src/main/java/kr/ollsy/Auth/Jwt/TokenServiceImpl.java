@@ -1,9 +1,9 @@
-package kr.ollsy.Jwt;
+package kr.ollsy.Auth.Jwt;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import kr.ollsy.Jwt.dto.TokenResponse;
+import kr.ollsy.Auth.Jwt.dto.TokenResponse;
 import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.global.exception.GlobalExceptionCode;
 import lombok.RequiredArgsConstructor;

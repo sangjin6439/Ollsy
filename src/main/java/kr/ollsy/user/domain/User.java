@@ -1,4 +1,4 @@
-package kr.ollsy.user;
+package kr.ollsy.user.domain;
 
 import java.util.UUID;
 
