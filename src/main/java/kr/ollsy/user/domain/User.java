@@ -3,6 +3,7 @@ package kr.ollsy.user.domain;
 import java.util.UUID;
 
 import jakarta.persistence.*;
+import kr.ollsy.user.dto.request.UserNicknameUpdateRequest;
 import lombok.AccessLevel;
 import lombok.*;
 
@@ -19,13 +20,13 @@ public class User {
     @Column(name = "users_id")
     private Long id;
 
-    @Column(name = "users_uuid",columnDefinition = "BINARY(16)", nullable = false)
+    @Column(name = "users_uuid", columnDefinition = "BINARY(16)", nullable = false)
     private UUID userId;
 
     @Column(name = "name", nullable = false, length = 5) //이런 규칙들은 엔티티가 변경될 수 있는 dto로 다 옮기고 entity에 혼잡을 주지 않기
     private String name;
 
-    @Column(name = "nickname", nullable=false)
+    @Column(name = "nickname", nullable = false)
     private String nickname;
 
     @Column(name = "email")
@@ -37,4 +38,7 @@ public class User {
     @Column(name = "provider_id", nullable = false, length = 50)
     private String providerId;
 
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
