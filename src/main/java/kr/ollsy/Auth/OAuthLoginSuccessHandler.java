@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -78,7 +77,6 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
             log.info("신규 유저입니다. 등록을 진행합니다.");
             
             user = User.builder()
-                    .userId(UUID.randomUUID())
                     .name(name)
                     .nickname(NicknameGenerator.generateNickname())
                     .email(email)
@@ -89,7 +87,7 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         } else {
             // 기존 유저인 경우
             log.info("기존 유저입니다.");
-            refreshTokenRepository.deleteByUserId(existUser.getUserId());
+            refreshTokenRepository.deleteByUserId(existUser.getId());
             user = existUser;
         }
 
@@ -99,21 +97,21 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         log.info("PROVIDER_ID : {}", providerId);
 
         // 리프레쉬 토큰 발급 후 저장
-        String refreshToken = jwtUtil.generateRefreshToken(user.getUserId(), REFRESH_TOKEN_EXPIRATION_TIME);
+        String refreshToken = jwtUtil.generateRefreshToken(user.getId(), REFRESH_TOKEN_EXPIRATION_TIME);
 
         RefreshToken newRefreshToken = RefreshToken.builder()
-                .userId(user.getUserId())
+                .userId(user.getId())
                 .token(refreshToken)
                 .build();
         refreshTokenRepository.save(newRefreshToken);
 
         // 액세스 토큰 발급
-        String accessToken = jwtUtil.generateAccessToken(user.getUserId(), ACCESS_TOKEN_EXPIRATION_TIME);
+        String accessToken = jwtUtil.generateAccessToken(user.getId(), ACCESS_TOKEN_EXPIRATION_TIME);
 
         //유저 정보 및 토큰을 담아 리다이렉트
         LoginResponse loginResponse = LoginResponse.of(
                 name,
-                user.getUserId().getMostSignificantBits(),  // UUID → Long 변환
+                user.getId(),
                 email,
                 accessToken,
                 refreshToken

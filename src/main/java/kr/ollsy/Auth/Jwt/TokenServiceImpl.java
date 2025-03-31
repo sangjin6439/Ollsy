@@ -8,8 +8,6 @@ import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.global.exception.GlobalExceptionCode;
 import lombok.RequiredArgsConstructor;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
@@ -23,14 +21,14 @@ public class TokenServiceImpl implements TokenService {
     public TokenResponse reissueAccessToken(final String authorizationHeader) {
         String refreshToken = jwtUtil.getTokenFromHeader(authorizationHeader);
         String userId = jwtUtil.getUserIdFromToken(refreshToken);
-        RefreshToken existRefreshToken = refreshTokenRepository.findByUserId(UUID.fromString(userId));
+        RefreshToken existRefreshToken = refreshTokenRepository.findByUserId(Long.valueOf(userId));
         String accessToken = null;
 
         //리프레쉬 토큰이 다르거나, 만료된 경우
         if (!existRefreshToken.getToken().equals(refreshToken) || jwtUtil.isTokenExpired(refreshToken)) {
             throw new CustomException(GlobalExceptionCode.UNAUTHORIZED);
         } else {
-            accessToken = jwtUtil.generateAccessToken(UUID.fromString(userId), ACCESS_TOKEN_EXPIRATION_TIME);
+            accessToken = jwtUtil.generateAccessToken(Long.valueOf(userId), ACCESS_TOKEN_EXPIRATION_TIME);
         }
 
         return TokenResponse.of(accessToken);
