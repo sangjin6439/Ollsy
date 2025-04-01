@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import kr.ollsy.user.dto.request.UserNicknameUpdateRequest;
 import kr.ollsy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,7 +23,7 @@ public class UserController {
     public ResponseEntity<String> userNicknameUpdate(
             @PathVariable("id") Long id,
             @RequestBody @Valid UserNicknameUpdateRequest nicknameUpdateRequest
-    ){
-        return ResponseEntity.ok(userService.userNicknameUpdate(id,nicknameUpdateRequest));
+    ) {
+        return ResponseEntity.ok(userService.userNicknameUpdate(id, nicknameUpdateRequest));
     }
 }
