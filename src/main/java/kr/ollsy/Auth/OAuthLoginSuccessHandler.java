@@ -57,6 +57,7 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
             case "kakao" -> {
                 log.info("카카오 로그인 요청");
                 oAuth2UserInfo = new KakaoUserInfo(token.getPrincipal().getAttributes());
+                System.out.print(token.getPrincipal().getAttributes());
             }
             case "naver" -> {
                 log.info("네이버 로그인 요청");
