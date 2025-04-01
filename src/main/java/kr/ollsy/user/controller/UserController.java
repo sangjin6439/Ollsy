@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.validation.Valid;
 import kr.ollsy.user.dto.request.UserNicknameUpdateRequest;
 import kr.ollsy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<String> userNicknameUpdate(
             @PathVariable("id") Long id,
-            @RequestBody UserNicknameUpdateRequest nicknameUpdateRequest
+            @RequestBody @Valid UserNicknameUpdateRequest nicknameUpdateRequest
     ){
         return ResponseEntity.ok(userService.userNicknameUpdate(id,nicknameUpdateRequest));
     }
