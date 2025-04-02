@@ -2,15 +2,19 @@ package kr.ollsy.item.controller;
 
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 
 import jakarta.validation.Valid;
 import kr.ollsy.item.dto.request.ItemRequest;
+import kr.ollsy.item.dto.response.ItemListResponse;
 import kr.ollsy.item.dto.response.ItemResponse;
 import kr.ollsy.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -31,4 +35,16 @@ public class ItemController {
         )).body(itemResponse);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ItemResponse> findItem(
+            @PathVariable("id") Long id
+    ){
+        return ResponseEntity.ok(itemService.findItem(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ItemListResponse>> findItems(
+    ){
+        return ResponseEntity.ok(itemService.findItems());
+    }
 }
