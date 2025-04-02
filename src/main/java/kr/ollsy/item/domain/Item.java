@@ -46,6 +46,13 @@ public class Item extends DateEntity {
         this.stock = stock;
     }
 
+    public void updateItem(String name, String description, int price, int stock){
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+    }
+
     private void validate(String name, String description, int price, int stock) {
         validateNotNull(name, description, price, stock);
         validateNotBlank(name, description);
@@ -62,4 +69,6 @@ public class Item extends DateEntity {
             throw new IllegalArgumentException("제품 이름, 제품 설명은 비어있을 수 없습니다");
         }
     }
+
+
 }

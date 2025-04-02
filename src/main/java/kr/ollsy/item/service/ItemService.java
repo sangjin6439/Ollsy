@@ -2,6 +2,7 @@ package kr.ollsy.item.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -49,5 +50,13 @@ public class ItemService {
                         .build())
                 .toList();
         return itemListResponses;
+    }
+
+    @Transactional
+    public ItemResponse updateItem(Long id, ItemRequest itemRequest) {
+        Item item = findItemById(id);
+        item.updateItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock());
+
+        return ItemResponse.of(item.getId(),item.getName(), item.getDescription(), item.getPrice(), item.getStock());
     }
 }
