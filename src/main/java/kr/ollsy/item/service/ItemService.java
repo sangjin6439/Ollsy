@@ -59,4 +59,8 @@ public class ItemService {
 
         return ItemResponse.of(item.getId(),item.getName(), item.getDescription(), item.getPrice(), item.getStock());
     }
+
+    public void deleteItem(Long id) {
+        itemRepository.deleteById(id);
+    }
 }

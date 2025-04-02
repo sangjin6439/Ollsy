@@ -2,6 +2,7 @@ package kr.ollsy.item.controller;
 
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,5 +56,13 @@ public class ItemController {
             @RequestBody ItemRequest itemRequest
     ){
         return ResponseEntity.ok(itemService.updateItem(id, itemRequest));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteItem(
+            @PathVariable("id") Long id
+    ){
+        itemService.deleteItem(id);
+        return ResponseEntity.noContent().build();
     }
 }
