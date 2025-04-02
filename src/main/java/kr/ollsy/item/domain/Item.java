@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import kr.ollsy.global.entity.DateEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @Table(name = "items")
-public class Item {
+public class Item extends DateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,5 +62,4 @@ public class Item {
             throw new IllegalArgumentException("제품 이름, 제품 설명은 비어있을 수 없습니다");
         }
     }
-
 }
