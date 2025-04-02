@@ -33,4 +33,29 @@ public class Item {
 
     @Column(nullable = false)
     int price;
+
+    public Item(String name, String description, int price) {
+        validate(name, description, price);
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
+
+    private void validate(String name, String description, int price) {
+        validateNotNull(name, description, price);
+        validateNotBlank(name, description);
+    }
+
+    private void validateNotNull(String name, String description, int price) {
+        if (name == null || description == null ||  (Integer)price == null) {
+            throw new IllegalArgumentException("제품 이름, 제품 설명, 가격을 입력해 주세요.");
+        }
+    }
+
+    private void validateNotBlank(String name, String description) {
+        if (name.isBlank() || description.isBlank()) {
+            throw new IllegalArgumentException("제품 이름, 제품 설명은 비어있을 수 없습니다");
+        }
+    }
+
 }
