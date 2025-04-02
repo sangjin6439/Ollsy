@@ -20,7 +20,9 @@ public class ItemRequest {
 
     private int price;
 
-    public Item toItem(String name, String description, int price) {
-        return new Item(name,description,price);
+    private int stock;
+
+    public Item toItem(String name, String description, int price, int stock) {
+        return new Item(name, description, price, stock);
     }
 }

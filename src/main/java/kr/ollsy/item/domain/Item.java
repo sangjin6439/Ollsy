@@ -34,20 +34,24 @@ public class Item {
     @Column(nullable = false)
     int price;
 
-    public Item(String name, String description, int price) {
-        validate(name, description, price);
+    @Column(nullable = false)
+    int stock;
+
+    public Item(String name, String description, int price, int stock) {
+        validate(name, description, price, stock);
         this.name = name;
         this.description = description;
         this.price = price;
+        this.stock = stock;
     }
 
-    private void validate(String name, String description, int price) {
-        validateNotNull(name, description, price);
+    private void validate(String name, String description, int price, int stock) {
+        validateNotNull(name, description, price, stock);
         validateNotBlank(name, description);
     }
 
-    private void validateNotNull(String name, String description, int price) {
-        if (name == null || description == null ||  (Integer)price == null) {
+    private void validateNotNull(String name, String description, int price, int stock) {
+        if (name == null || description == null || (Integer) price == null || (Integer) stock == null) {
             throw new IllegalArgumentException("제품 이름, 제품 설명, 가격을 입력해 주세요.");
         }
     }

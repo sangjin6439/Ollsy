@@ -14,15 +14,17 @@ public class ItemResponse {
     private String name;
     private String description;
     private int price;
+    private int stock;
 
     public static ItemResponse of(
-            Long id, String name, String description, int price
+            Long id, String name, String description, int price, int stock
     ){
         return ItemResponse.builder()
                 .id(id)
                 .name(name)
                 .description(description)
                 .price(price)
+                .stock(stock)
                 .build();
     }
 }

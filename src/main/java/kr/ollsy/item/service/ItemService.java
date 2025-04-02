@@ -16,8 +16,8 @@ public class ItemService {
     private final ItemRepository itemRepository;
 
     public ItemResponse createItem(ItemRequest itemRequest) {
-        Item item = itemRequest.toItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice());
+        Item item = itemRequest.toItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock());
         itemRepository.save(item);
-        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice());
+        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock());
     }
 }
