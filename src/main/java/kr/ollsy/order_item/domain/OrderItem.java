@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import kr.ollsy.item.domain.Item;
 import kr.ollsy.order.domain.Order;
@@ -37,5 +36,4 @@ public class OrderItem {
 
     private int quantity;
 
-    private int orderPrice;
 }

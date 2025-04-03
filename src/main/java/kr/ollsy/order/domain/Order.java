@@ -41,5 +41,4 @@ public class Order extends DateEntity {
     private List<OrderItem> orderItems;
 
     private int totalPrice;
-
 }
