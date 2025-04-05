@@ -43,4 +43,9 @@ public class Order extends DateEntity {
     private List<OrderItem> orderItems;
 
     private int totalPrice;
+
+    public void setUser(User user){
+        this.user = user;
+        user.getOrders().add(this);
+    }
 }

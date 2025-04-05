@@ -1,12 +1,19 @@
 package kr.ollsy.user.domain;
 
+import net.minidev.json.annotate.JsonIgnore;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import kr.ollsy.global.entity.DateEntity;
+import kr.ollsy.order.domain.Order;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,7 +48,18 @@ public class User extends DateEntity{
     @Column(name = "provider_id", nullable = false, length = 50)
     private String providerId;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders = new ArrayList<>();
+
+
     public void updateNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    //편의 메서드
+    public void addOrder(Order order){
+        this.orders.add(order);
+        order.setUser(this);
     }
 }
