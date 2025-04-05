@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class OrderResponse {
-
+    private Long id;
     private List<OrderItemResponse> orderItemResponseList;
     private int totalPrice;
 }

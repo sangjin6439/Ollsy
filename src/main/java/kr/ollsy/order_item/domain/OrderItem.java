@@ -13,9 +13,13 @@ import kr.ollsy.item.domain.Item;
 import kr.ollsy.order.domain.Order;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "order_items")
@@ -36,4 +40,15 @@ public class OrderItem {
 
     private int quantity;
 
+    public static OrderItem of(Order order, Item item, int quantity){
+       return OrderItem.builder()
+               .order(order)
+               .item(item)
+               .quantity(quantity)
+               .build();
+    }
+
+    public void setOrder(Order order) {
+        this.order=order;
+    }
 }

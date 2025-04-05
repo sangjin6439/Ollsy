@@ -18,6 +18,7 @@ import kr.ollsy.order_item.domain.OrderItem;
 import kr.ollsy.user.domain.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Builder
 @Table(name = "orders")
 public class Order extends DateEntity {
 

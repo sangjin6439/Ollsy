@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OrderItemResponse {
     private String name;
-    int price;
-    int quantity;
+    private int price;
+    private int quantity;
 }

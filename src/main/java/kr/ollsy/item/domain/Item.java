@@ -46,7 +46,7 @@ public class Item extends DateEntity {
         this.stock = stock;
     }
 
-    public void updateItem(String name, String description, int price, int stock){
+    public void updateItem(String name, String description, int price, int stock) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -70,5 +70,10 @@ public class Item extends DateEntity {
         }
     }
 
-
+    public void removeStock(int quantity) {
+        if (this.stock < quantity) {
+            throw new IllegalArgumentException("재고가 부족합니다!");
+        }
+        this.stock -= quantity;
+    }
 }
