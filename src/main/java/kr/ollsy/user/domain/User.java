@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @Table(name = "users")
-public class User extends DateEntity {
+public class User extends DateEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

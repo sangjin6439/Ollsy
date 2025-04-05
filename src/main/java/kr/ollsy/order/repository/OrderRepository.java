@@ -3,6 +3,8 @@ package kr.ollsy.order.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import kr.ollsy.order.domain.Order;
+
 @Repository
-public interface OrderRepository extends JpaRepository {
+public interface OrderRepository extends JpaRepository<Order, Long> {
 }

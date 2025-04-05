@@ -1,4 +1,4 @@
-package kr.ollsy.Auth.Jwt;
+package kr.ollsy.auth.jwt;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

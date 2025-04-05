@@ -1,4 +1,4 @@
-package kr.ollsy.Auth.Jwt;
+package kr.ollsy.auth.jwt;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import kr.ollsy.Auth.Jwt.dto.TokenResponse;
+import kr.ollsy.auth.jwt.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController

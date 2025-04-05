@@ -1,4 +1,4 @@
-package kr.ollsy.Auth;
+package kr.ollsy.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -13,10 +13,10 @@ import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kr.ollsy.Auth.Jwt.JwtUtil;
-import kr.ollsy.Auth.Jwt.RefreshToken;
-import kr.ollsy.Auth.Jwt.RefreshTokenRepository;
-import kr.ollsy.Auth.Jwt.dto.LoginResponse;
+import kr.ollsy.auth.jwt.JwtUtil;
+import kr.ollsy.auth.jwt.RefreshToken;
+import kr.ollsy.auth.jwt.RefreshTokenRepository;
+import kr.ollsy.auth.jwt.dto.LoginResponse;
 import kr.ollsy.global.util.NicknameGenerator;
 import kr.ollsy.user.domain.User;
 import kr.ollsy.user.repository.UserRepository;

@@ -1,4 +1,4 @@
-package kr.ollsy.Auth.Jwt.dto;
+package kr.ollsy.auth.jwt.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

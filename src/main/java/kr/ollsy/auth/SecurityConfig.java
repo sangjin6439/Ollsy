@@ -1,4 +1,6 @@
-package kr.ollsy.Auth;
+package kr.ollsy.auth;
+
+import com.nimbusds.oauth2.sdk.auth.JWTAuthentication;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,11 +9,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Collections;
 
+import kr.ollsy.auth.jwt.JwtFilter;
+import kr.ollsy.auth.jwt.JwtUtil;
+import kr.ollsy.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -20,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
     private final OAuthLoginSuccessHandler oAuthLoginSuccessHandler;
     private final OAuthLoginFailureHandler oAuthLoginFailureHandler;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
     // CORS 설정
     CorsConfigurationSource corsConfigurationSource() {
@@ -32,6 +40,7 @@ public class SecurityConfig {
             return config;
         };
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.
@@ -41,14 +50,15 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // X-Frames-Options 비활성화 -> h2 데이터베이스 콘솔 사용 가능
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/**").permitAll()
+                                .requestMatchers("/test").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> // OAuth2 로그인 기능에 대한 여러 설정의 진입점
                         oauth
                                 .successHandler(oAuthLoginSuccessHandler) // 로그인 성공 시 핸들러
                                 .failureHandler(oAuthLoginFailureHandler) // 로그인 실패 시 핸들러
-                );
+                ).addFilterBefore(new JwtFilter(jwtUtil, userRepository), UsernamePasswordAuthenticationFilter.class)
+        ;
         return httpSecurity.build();
     }
 }

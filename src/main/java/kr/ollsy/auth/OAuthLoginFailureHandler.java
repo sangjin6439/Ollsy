@@ -1,4 +1,4 @@
-package kr.ollsy.Auth;
+package kr.ollsy.auth;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;

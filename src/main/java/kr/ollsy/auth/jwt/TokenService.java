@@ -1,6 +1,6 @@
-package kr.ollsy.Auth.Jwt;
+package kr.ollsy.auth.jwt;
 
-import kr.ollsy.Auth.Jwt.dto.TokenResponse;
+import kr.ollsy.auth.jwt.dto.TokenResponse;
 
 public interface TokenService {
 
