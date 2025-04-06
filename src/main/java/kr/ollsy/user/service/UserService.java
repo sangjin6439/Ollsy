@@ -9,6 +9,7 @@ import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.global.exception.GlobalExceptionCode;
 import kr.ollsy.user.domain.User;
 import kr.ollsy.user.dto.request.UserNicknameUpdateRequest;
+import kr.ollsy.user.dto.response.UserResponse;
 import kr.ollsy.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -36,5 +37,15 @@ public class UserService {
 
     private User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new CustomException(GlobalExceptionCode.NOT_FOUND));
+    }
+
+    public UserResponse findUser(String providerId) {
+        User user = userRepository.findByProviderId(providerId);
+        return UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .build();
     }
 }

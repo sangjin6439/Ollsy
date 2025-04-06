@@ -1,14 +1,18 @@
 package kr.ollsy.user.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
+import kr.ollsy.auth.jwt.dto.CustomOAuth2User;
 import kr.ollsy.user.dto.request.UserNicknameUpdateRequest;
+import kr.ollsy.user.dto.response.UserResponse;
 import kr.ollsy.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +22,13 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping
+    public ResponseEntity<UserResponse> findUser(
+            @AuthenticationPrincipal CustomOAuth2User user
+    ) {
+        return ResponseEntity.ok(userService.findUser(user.getName()));
+    }
 
     @PatchMapping("/{id}")
     public ResponseEntity<String> userNicknameUpdate(
