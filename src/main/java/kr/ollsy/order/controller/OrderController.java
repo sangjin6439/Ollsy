@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 
 import kr.ollsy.auth.OAuth2UserInfo;
 import kr.ollsy.auth.jwt.dto.CustomOAuth2User;
@@ -41,5 +42,12 @@ public class OrderController {
             @PathVariable("id") Long id
     ){
         return ResponseEntity.ok(orderService.findOrder(user.getName(),id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OrderResponse>> findOrders(
+            @AuthenticationPrincipal CustomOAuth2User user
+    ){
+        return ResponseEntity.ok(orderService.findOrders(user.getName()));
     }
 }

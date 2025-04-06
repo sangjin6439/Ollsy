@@ -74,8 +74,8 @@ public class OrderService {
                 .toList();
     }
 
-    public OrderDetailResponse findOrder(String name, Long id) {
-        Order order = orderRepository.findByIdAndUser_ProviderId(id,name).orElseThrow(()->new IllegalArgumentException("유저의 주문 정보를 확인할 수 없습니다."));
+    public OrderDetailResponse findOrder(String providerId, Long id) {
+        Order order = orderRepository.findByIdAndUser_ProviderId(id, providerId).orElseThrow(() -> new IllegalArgumentException("유저의 주문 정보를 확인할 수 없습니다."));
         List<OrderItemResponse> orderItemResponse = orderItemListToDto(order.getOrderItems());
         return OrderDetailResponse.builder()
                 .id(order.getId())
@@ -83,5 +83,19 @@ public class OrderService {
                 .totalPrice(order.getTotalPrice())
                 .orderAt(order.getCreateAt())
                 .build();
+    }
+
+    public List<OrderResponse> findOrders(String providerId) {
+        User user = userRepository.findByProviderId(providerId);
+
+        List<Order> orders = user.getOrders();
+
+        return orders.stream()
+                .map(o -> OrderResponse.builder()
+                        .id(o.getId())
+                        .orderItemResponseList(orderItemListToDto(o.getOrderItems()))
+                        .totalPrice(o.getTotalPrice())
+                        .build())
+                .toList();
     }
 }
