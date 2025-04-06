@@ -74,8 +74,9 @@ public class OrderService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public OrderDetailResponse findOrder(String providerId, Long id) {
-        Order order = orderRepository.findByIdAndUser_ProviderId(id, providerId).orElseThrow(() -> new IllegalArgumentException("유저의 주문 정보를 확인할 수 없습니다."));
+        Order order = findOrderWithProviderId(providerId, id);
         List<OrderItemResponse> orderItemResponse = orderItemListToDto(order.getOrderItems());
         return OrderDetailResponse.builder()
                 .id(order.getId())
@@ -85,6 +86,12 @@ public class OrderService {
                 .build();
     }
 
+    private Order findOrderWithProviderId(String providerId, Long id) {
+        return orderRepository.findByIdAndUser_ProviderId(id, providerId)
+                .orElseThrow(() -> new IllegalArgumentException("유저의 주문 정보를 확인할 수 없습니다."));
+    }
+
+    @Transactional(readOnly = true)
     public List<OrderResponse> findOrders(String providerId) {
         User user = userRepository.findByProviderId(providerId);
 
@@ -97,5 +104,11 @@ public class OrderService {
                         .totalPrice(o.getTotalPrice())
                         .build())
                 .toList();
+    }
+
+    @Transactional
+    public void cancelOrder(String providerId, Long id) {
+        Order order = findOrderWithProviderId(providerId, id);
+        orderRepository.delete(order);
     }
 }
