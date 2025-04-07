@@ -51,8 +51,8 @@ public class OrderService {
 
         orderItemList.forEach(o -> o.setOrder(order));
 
-        order.setUser(user);
-        user.addOrder(order);
+       /* order.setUser(user);
+        user.addOrder(order);*/
 
         orderRepository.save(order);
 

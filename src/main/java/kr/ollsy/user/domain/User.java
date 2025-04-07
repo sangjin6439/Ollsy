@@ -52,7 +52,6 @@ public class User extends DateEntity{
     @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
 
-
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
