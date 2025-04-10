@@ -15,4 +15,5 @@ public class ItemListResponse {
     private String description;
     private int price;
     private int stock;
+    private String categoryName;
 }

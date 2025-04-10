@@ -50,6 +50,13 @@ public class ItemController {
         return ResponseEntity.ok(itemService.findItems());
     }
 
+    @GetMapping("/categorys/{id}")
+    public ResponseEntity<List<ItemListResponse>> findItemsByCategory(
+            @PathVariable("id") Long id
+    ){
+        return ResponseEntity.ok(itemService.findItemsByCategory(id));
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<ItemResponse> updateItem(
             @PathVariable("id") Long id,
