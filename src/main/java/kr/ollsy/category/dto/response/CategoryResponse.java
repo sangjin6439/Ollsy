@@ -14,20 +14,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryTreeResponse {
+public class CategoryResponse {
 
     private Long id;
     private String name;
     private int depth;
-    private List<CategoryTreeResponse> children;
 
-    public static CategoryTreeResponse of(Category category) {
-        return CategoryTreeResponse.builder()
+    public static CategoryResponse of(Category category) {
+        return CategoryResponse.builder()
                 .id(category.getId())
                 .name(category.getName())
                 .depth(category.getDepth())
-                .children(category.getChildren().stream()
-                        .map(c->CategoryTreeResponse.of(c)).toList())
                 .build();
     }
 }

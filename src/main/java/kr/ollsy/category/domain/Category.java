@@ -1,5 +1,10 @@
 package kr.ollsy.category.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import net.minidev.json.annotate.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
