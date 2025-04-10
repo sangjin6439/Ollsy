@@ -10,4 +10,6 @@ import kr.ollsy.item.domain.Item;
 @Repository
 public interface ItemRepository extends JpaRepository<Item,Long> {
     List<Item> findItemsByCategoryId(Long id);
+
+    List<Item> findAllByCategoryIdIn(List<Long> categoryIdList);
 }

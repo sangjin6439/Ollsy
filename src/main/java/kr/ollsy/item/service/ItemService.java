@@ -1,9 +1,11 @@
 package kr.ollsy.item.service;
 
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kr.ollsy.category.domain.Category;
@@ -74,10 +76,32 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public List<ItemListResponse> findItemsByCategory(Long id) {
-        List<Item> itemList = itemRepository.findItemsByCategoryId(id);
+    public List<ItemListResponse> findItemsByCategory(Long id, boolean includeSub) {
+        List<Item> itemList;
+
+        if (includeSub) {
+            Category category = findCategory(id);
+            List<Long> categoryIdList = getAllCategoryIdList(category);
+            itemList = itemRepository.findAllByCategoryIdIn(categoryIdList);
+        } else {
+            itemList = itemRepository.findItemsByCategoryId(id);
+        }
+
         List<ItemListResponse> itemListResponseList = createItemListResponse(itemList);
         return itemListResponseList;
+    }
+
+    private List<Long> getAllCategoryIdList(Category category) {
+        List<Long> idList = new ArrayList<>();
+        collectCategoryIdList(category,idList);
+        return idList;
+    }
+
+    private void collectCategoryIdList(Category category, List<Long> idList){
+        idList.add(category.getId());
+        for(Category child : category.getChildren()){
+            collectCategoryIdList(child,idList);
+        }
     }
 
     @Transactional

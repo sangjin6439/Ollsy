@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -52,9 +53,11 @@ public class ItemController {
 
     @GetMapping("/categorys/{id}")
     public ResponseEntity<List<ItemListResponse>> findItemsByCategory(
-            @PathVariable("id") Long id
+            @PathVariable("id") Long id,
+            @RequestParam(value = "includeSub", required = false, defaultValue = "false") boolean includeSub
+
     ){
-        return ResponseEntity.ok(itemService.findItemsByCategory(id));
+        return ResponseEntity.ok(itemService.findItemsByCategory(id, includeSub));
     }
 
     @PatchMapping("/{id}")
