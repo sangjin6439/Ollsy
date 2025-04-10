@@ -31,7 +31,8 @@ public class CategoryService {
 
     private Category findParent(Long parentId) {
         if (parentId == 0) return null;
-        return categoryRepository.findById(parentId).orElseThrow(() -> new IllegalArgumentException("상위 카테고리가 없습니다."));
+        return categoryRepository.findById(parentId)
+                .orElseThrow(() -> new IllegalArgumentException("상위 카테고리가 없습니다."));
     }
 
     private int calculateDepth(Category parent) {
@@ -50,11 +51,15 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<CategoryTreeResponse> findCategorys() {
         List<Category> categoryList = categoryRepository.findAll();
-
-        List<CategoryTreeResponse> categoryTreeResponseList = categoryList.stream()
-                .filter(category -> category.getDepth() == 0)
-                .map(c -> CategoryTreeResponse.of(c)).toList();
+        List<CategoryTreeResponse> categoryTreeResponseList = createCategoryTreeResponseList(categoryList);
         return categoryTreeResponseList;
+    }
+
+    private List<CategoryTreeResponse> createCategoryTreeResponseList(List<Category> categoryList){
+        return categoryList.stream()
+                .filter(category -> category.getDepth() == 0)
+                .map(c -> CategoryTreeResponse.of(c))
+                .toList();
     }
 
     @Transactional
