@@ -56,4 +56,9 @@ public class CategoryService {
                 .map(c -> CategoryTreeResponse.of(c)).toList();
         return categoryTreeResponseList;
     }
+
+    @Transactional
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
+    }
 }

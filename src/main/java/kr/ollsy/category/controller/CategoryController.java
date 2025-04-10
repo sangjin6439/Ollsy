@@ -1,7 +1,9 @@
 package kr.ollsy.category.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +13,6 @@ import java.net.URI;
 import java.util.List;
 
 import jakarta.validation.Valid;
-import kr.ollsy.category.domain.Category;
 import kr.ollsy.category.dto.request.CategoryRequest;
 import kr.ollsy.category.dto.response.CategoryResponse;
 import kr.ollsy.category.dto.response.CategoryTreeResponse;
@@ -35,7 +36,15 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<List<CategoryTreeResponse>> findCategorys(
-    ){
+    ) {
         return ResponseEntity.ok(categoryService.findCategorys());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCategory(
+            @PathVariable("id") Long id
+    ) {
+        categoryService.deleteCategory(id);
+        return ResponseEntity.noContent().build();
     }
 }
