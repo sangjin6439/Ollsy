@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/categorys")
+@RequestMapping("/api/v1/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -31,13 +31,13 @@ public class CategoryController {
             @RequestBody @Valid CategoryRequest categoryRequest
     ) {
         CategoryResponse categoryResponse = categoryService.createCategory(categoryRequest);
-        return ResponseEntity.created(URI.create("/api/v1/categorys/" + categoryResponse.getId())).body(categoryResponse);
+        return ResponseEntity.created(URI.create("/api/v1/categories/" + categoryResponse.getId())).body(categoryResponse);
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryTreeResponse>> findCategorys(
+    public ResponseEntity<List<CategoryTreeResponse>> findCategories(
     ) {
-        return ResponseEntity.ok(categoryService.findCategorys());
+        return ResponseEntity.ok(categoryService.findCategories());
     }
 
     @DeleteMapping("/{id}")

@@ -29,12 +29,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "categorys")
+@Table(name = "categories")
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "categorys_id")
+    @Column(name = "categories_id")
     private Long id;
 
     @Column(nullable = false)

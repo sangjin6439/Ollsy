@@ -49,7 +49,7 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<CategoryTreeResponse> findCategorys() {
+    public List<CategoryTreeResponse> findCategories() {
         List<Category> categoryList = categoryRepository.findAll();
         List<CategoryTreeResponse> categoryTreeResponseList = createCategoryTreeResponseList(categoryList);
         return categoryTreeResponseList;

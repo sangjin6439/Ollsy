@@ -43,7 +43,7 @@ public class Item extends DateEntity {
     int stock;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categorys_id")
+    @JoinColumn(name = "categories_id")
     private Category category;
 
     public Item(String name, String description, int price, int stock, Category category) {

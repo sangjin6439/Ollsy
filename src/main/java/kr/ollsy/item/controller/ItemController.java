@@ -51,7 +51,7 @@ public class ItemController {
         return ResponseEntity.ok(itemService.findItems());
     }
 
-    @GetMapping("/categorys/{id}")
+    @GetMapping("/categories/{id}")
     public ResponseEntity<List<ItemListResponse>> findItemsByCategory(
             @PathVariable("id") Long id,
             @RequestParam(value = "includeSub", required = false, defaultValue = "false") boolean includeSub
