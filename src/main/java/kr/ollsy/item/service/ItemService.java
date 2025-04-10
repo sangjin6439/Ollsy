@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
+import kr.ollsy.category.domain.Category;
+import kr.ollsy.category.repository.CategoryRepository;
 import kr.ollsy.item.domain.Item;
 import kr.ollsy.item.dto.request.ItemRequest;
 import kr.ollsy.item.dto.response.ItemListResponse;
@@ -19,18 +21,32 @@ import lombok.RequiredArgsConstructor;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final CategoryRepository categoryRepository;
 
     @Transactional
     public ItemResponse createItem(ItemRequest itemRequest) {
-        Item item = itemRequest.toItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock());
+        validCategoryIdIsNull(itemRequest.getCategoryId());
+        Category category = findCategory(itemRequest.getCategoryId());
+        Item item = itemRequest.toItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock(), category);
         itemRepository.save(item);
-        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock());
+        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(),item.getCategory().getName());
+    }
+
+    private void validCategoryIdIsNull(Long id){
+        if(id==null){
+            throw new IllegalArgumentException("카테고리를 설정해 주세요");
+        }
+    }
+
+    private Category findCategory(Long id){
+        return categoryRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("카테고리를 다시 확인해 주세요"));
     }
 
     @Transactional(readOnly = true)
     public ItemResponse findItem(Long id) {
         Item item = findItemById(id);
-        return ItemResponse.of(item.getId(),item.getName(), item.getDescription(), item.getPrice(), item.getStock());
+        return ItemResponse.of(item.getId(),item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName());
     }
 
     private Item findItemById(Long id){
@@ -55,9 +71,12 @@ public class ItemService {
     @Transactional
     public ItemResponse updateItem(Long id, ItemRequest itemRequest) {
         Item item = findItemById(id);
-        item.updateItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock());
+        validCategoryIdIsNull(itemRequest.getCategoryId());
+        Category category = findCategory(itemRequest.getCategoryId());
 
-        return ItemResponse.of(item.getId(),item.getName(), item.getDescription(), item.getPrice(), item.getStock());
+        item.updateItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock(),category);
+
+        return ItemResponse.of(item.getId(),item.getName(), item.getDescription(), item.getPrice(), item.getStock(),item.getCategory().getName());
     }
 
     public void deleteItem(Long id) {

@@ -36,15 +36,15 @@ public class Order extends DateEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="users_Id")
+    @JoinColumn(name = "users_Id")
     private User user;
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL) //OrderItem과 생명주기가 같음
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //OrderItem과 생명주기가 같음
     private List<OrderItem> orderItems;
 
     private int totalPrice;
 
-    public void setUser(User user){
+    public void setUser(User user) {
         this.user = user;
         user.getOrders().add(this);
     }

@@ -2,10 +2,14 @@ package kr.ollsy.item.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import kr.ollsy.category.domain.Category;
 import kr.ollsy.global.entity.DateEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -38,19 +42,25 @@ public class Item extends DateEntity {
     @Column(nullable = false)
     int stock;
 
-    public Item(String name, String description, int price, int stock) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categorys_id")
+    private Category category;
+
+    public Item(String name, String description, int price, int stock, Category category) {
         validate(name, description, price, stock);
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
+        this.category = category;
     }
 
-    public void updateItem(String name, String description, int price, int stock) {
+    public void updateItem(String name, String description, int price, int stock, Category category) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
+        this.category = category;
     }
 
     private void validate(String name, String description, int price, int stock) {

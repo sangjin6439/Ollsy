@@ -15,9 +15,10 @@ public class ItemResponse {
     private String description;
     private int price;
     private int stock;
+    private String categoryName;
 
     public static ItemResponse of(
-            Long id, String name, String description, int price, int stock
+            Long id, String name, String description, int price, int stock, String categoryName
     ){
         return ItemResponse.builder()
                 .id(id)
@@ -25,6 +26,7 @@ public class ItemResponse {
                 .description(description)
                 .price(price)
                 .stock(stock)
+                .categoryName(categoryName)
                 .build();
     }
 }
