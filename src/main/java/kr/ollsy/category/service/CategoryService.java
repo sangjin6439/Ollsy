@@ -1,5 +1,6 @@
 package kr.ollsy.category.service;
 
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,10 @@ public class CategoryService {
         Category parent = findParent(categoryRequest.getParentId());
         int depth = calculateDepth(parent);
         Category category = saveCategory(categoryRequest.getName(), depth, parent);
+
+        if(parent!=null){
+            parent.addChild(category);
+        }
 
         categoryRepository.save(category);
 

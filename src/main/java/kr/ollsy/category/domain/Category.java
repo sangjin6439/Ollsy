@@ -49,6 +49,7 @@ public class Category {
     @JoinColumn(name = "parent_id")
     private Category parent;
 
+    @Builder.Default
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Category> children = new ArrayList<>();
 
@@ -56,6 +57,5 @@ public class Category {
     public void addChild(Category child) {
         this.children.add(child);
         child.parent = this;
-        child.depth = this.depth + 1;
     }
 }
