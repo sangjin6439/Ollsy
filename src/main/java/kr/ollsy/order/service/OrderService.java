@@ -37,7 +37,7 @@ public class OrderService {
                     Item item = itemRepository.findById(orderItemRequest.getItemId())
                             .orElseThrow(() -> new CustomException(GlobalExceptionCode.ITEM_NOT_FOUND));
                     item.removeStock(orderItemRequest.getQuantity());
-                    return OrderItem.of(null, item, orderItemRequest.getQuantity());
+                    return OrderItem.of(item, orderItemRequest.getQuantity());
                 })
                 .toList();
 
@@ -51,9 +51,8 @@ public class OrderService {
                 .totalPrice(totalPrice)
                 .build();
 
-        orderItemList.forEach(o -> o.setOrder(order));
+        orderItemList.forEach(order::addOrderItem);
 
-        order.setUser(user);
         user.addOrder(order);
 
         orderRepository.save(order);

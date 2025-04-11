@@ -1,5 +1,6 @@
 package kr.ollsy.order.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -47,5 +48,13 @@ public class Order extends DateEntity {
     public void setUser(User user) {
         this.user = user;
         user.getOrders().add(this);
+    }
+    //편의 메서드
+    public void addOrderItem(OrderItem orderItem) {
+        if (this.orderItems == null) {
+            this.orderItems = new ArrayList<>();
+        }
+        this.orderItems.add(orderItem);
+        orderItem.setOrder(this);
     }
 }

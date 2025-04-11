@@ -40,9 +40,8 @@ public class OrderItem {
 
     private int quantity;
 
-    public static OrderItem of(Order order, Item item, int quantity){
+    public static OrderItem of(Item item, int quantity){
        return OrderItem.builder()
-               .order(order)
                .item(item)
                .quantity(quantity)
                .build();
