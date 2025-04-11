@@ -88,4 +88,8 @@ public class Item extends DateEntity {
         }
         this.stock -= quantity;
     }
+
+    public void addStock(int quantity) {
+        this.stock += quantity;
+    }
 }

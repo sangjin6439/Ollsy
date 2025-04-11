@@ -53,8 +53,8 @@ public class OrderService {
 
         orderItemList.forEach(o -> o.setOrder(order));
 
-       /* order.setUser(user);
-        user.addOrder(order);*/
+        order.setUser(user);
+        user.addOrder(order);
 
         orderRepository.save(order);
 
@@ -111,6 +111,9 @@ public class OrderService {
     @Transactional
     public void cancelOrder(String providerId, Long id) {
         Order order = findOrderWithProviderId(providerId, id);
+        for (OrderItem orderItem : order.getOrderItems()) {
+            orderItem.addStock(orderItem.getQuantity());
+        }
         orderRepository.delete(order);
     }
 }
