@@ -1,4 +1,4 @@
-package kr.ollsy.auth;
+package kr.ollsy.auth.info;
 
 import java.util.Map;
 

@@ -1,21 +1,20 @@
 package kr.ollsy.item.service;
 
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import kr.ollsy.category.domain.Category;
 import kr.ollsy.category.repository.CategoryRepository;
+import kr.ollsy.global.exception.CustomException;
+import kr.ollsy.global.exception.GlobalExceptionCode;
 import kr.ollsy.item.domain.Item;
 import kr.ollsy.item.dto.request.ItemRequest;
 import kr.ollsy.item.dto.response.ItemListResponse;
 import kr.ollsy.item.dto.response.ItemResponse;
 import kr.ollsy.item.repository.ItemRepository;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -36,13 +35,13 @@ public class ItemService {
 
     private void validCategoryIdIsNull(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("카테고리를 설정해 주세요");
+            throw new CustomException(GlobalExceptionCode.CATEGORY_NOT_FOUND);
         }
     }
 
     private Category findCategory(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("카테고리를 다시 확인해 주세요"));
+                .orElseThrow(() -> new CustomException(GlobalExceptionCode.CATEGORY_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
@@ -52,7 +51,7 @@ public class ItemService {
     }
 
     private Item findItemById(Long id) {
-        return itemRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("제품을 찾을 수 없습니다."));
+        return itemRepository.findById(id).orElseThrow(() -> new CustomException(GlobalExceptionCode.ITEM_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
@@ -93,14 +92,14 @@ public class ItemService {
 
     private List<Long> getAllCategoryIdList(Category category) {
         List<Long> idList = new ArrayList<>();
-        collectCategoryIdList(category,idList);
+        collectCategoryIdList(category, idList);
         return idList;
     }
 
-    private void collectCategoryIdList(Category category, List<Long> idList){
+    private void collectCategoryIdList(Category category, List<Long> idList) {
         idList.add(category.getId());
-        for(Category child : category.getChildren()){
-            collectCategoryIdList(child,idList);
+        for (Category child : category.getChildren()) {
+            collectCategoryIdList(child, idList);
         }
     }
 

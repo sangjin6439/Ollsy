@@ -10,6 +10,9 @@ import kr.ollsy.category.dto.request.CategoryRequest;
 import kr.ollsy.category.dto.response.CategoryResponse;
 import kr.ollsy.category.dto.response.CategoryTreeResponse;
 import kr.ollsy.category.repository.CategoryRepository;
+import kr.ollsy.global.exception.CustomException;
+import kr.ollsy.global.exception.GlobalExceptionCode;
+import kr.ollsy.global.exception.GlobalExceptionHandler;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -32,7 +35,7 @@ public class CategoryService {
     private Category findParent(Long parentId) {
         if (parentId == 0) return null;
         return categoryRepository.findById(parentId)
-                .orElseThrow(() -> new IllegalArgumentException("상위 카테고리가 없습니다."));
+                .orElseThrow(() -> new CustomException(GlobalExceptionCode.PARENT_NOT_FOUND));
     }
 
     private int calculateDepth(Category parent) {
@@ -55,7 +58,7 @@ public class CategoryService {
         return categoryTreeResponseList;
     }
 
-    private List<CategoryTreeResponse> createCategoryTreeResponseList(List<Category> categoryList){
+    private List<CategoryTreeResponse> createCategoryTreeResponseList(List<Category> categoryList) {
         return categoryList.stream()
                 .filter(category -> category.getDepth() == 0)
                 .map(c -> CategoryTreeResponse.of(c))

@@ -5,6 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import kr.ollsy.global.exception.CustomException;
+import kr.ollsy.global.exception.GlobalExceptionCode;
 import kr.ollsy.item.domain.Item;
 import kr.ollsy.item.repository.ItemRepository;
 import kr.ollsy.order.domain.Order;
@@ -33,7 +35,7 @@ public class OrderService {
         List<OrderItem> orderItemList = orderRequest.getOrderItemsList().stream()
                 .map(orderItemRequest -> {
                     Item item = itemRepository.findById(orderItemRequest.getItemId())
-                            .orElseThrow(() -> new IllegalArgumentException("item을 찾을 수 없습니다"));
+                            .orElseThrow(() -> new CustomException(GlobalExceptionCode.ITEM_NOT_FOUND));
                     item.removeStock(orderItemRequest.getQuantity());
                     return OrderItem.of(null, item, orderItemRequest.getQuantity());
                 })
@@ -88,7 +90,7 @@ public class OrderService {
 
     private Order findOrderWithProviderId(String providerId, Long id) {
         return orderRepository.findByIdAndUser_ProviderId(id, providerId)
-                .orElseThrow(() -> new IllegalArgumentException("유저의 주문 정보를 확인할 수 없습니다."));
+                .orElseThrow(() -> new CustomException(GlobalExceptionCode.ORDER_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)

@@ -1,7 +1,6 @@
 package kr.ollsy.user.domain;
 
-import kr.ollsy.auth.OAuth2UserInfo;
-import kr.ollsy.user.domain.User;
+import kr.ollsy.auth.info.OAuth2UserInfo;
 
 public class UserOAuth2UserInfo implements OAuth2UserInfo {
 

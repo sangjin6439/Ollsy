@@ -1,11 +1,8 @@
 package kr.ollsy.auth.jwt;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -14,8 +11,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kr.ollsy.auth.OAuth2UserInfo;
-import kr.ollsy.auth.OAuthLoginSuccessHandler;
 import kr.ollsy.auth.jwt.dto.CustomOAuth2User;
 import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.global.exception.GlobalExceptionCode;
@@ -42,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if(!jwtUtil.isTokenExpired(token)){
             Long userId = Long.valueOf(jwtUtil.getUserIdFromToken(token));
 
-            User user = userRepository.findById(userId).orElseThrow(()-> new CustomException(GlobalExceptionCode.NOT_FOUND));
+            User user = userRepository.findById(userId).orElseThrow(()-> new CustomException(GlobalExceptionCode.USER_NOT_FOUND));
 
             UserOAuth2UserInfo userInfo = new UserOAuth2UserInfo(user);
             CustomOAuth2User principal = new CustomOAuth2User(userInfo);

@@ -9,17 +9,28 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum GlobalExceptionCode {
 
-    // 400 서버 오류
-    BAD_REQUEST("4001", "잘못된 요청입니다", HttpStatus.BAD_REQUEST),
+    // JwtExceptions
     UNAUTHORIZED("4011", "로그인이 필요합니다.", HttpStatus.UNAUTHORIZED),
     INVALID_TOKEN( "4012", "유효하지 않은 토큰입니다.",HttpStatus.UNAUTHORIZED),
     INVALID_ACCESS_TOKEN( "4013", "유효하지 않은 액세스 토큰입니다.",HttpStatus.UNAUTHORIZED),
     INVALID_REFRESH_TOKEN("4014", "유효하지 않은 리프레쉬 토큰입니다.",HttpStatus.UNAUTHORIZED),
-    NOT_FOUND("4041", "찾을 수 없습니다", HttpStatus.NOT_FOUND),
+
+    //UserExceptions
+    USER_NOT_FOUND("4041","사용자 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     DUPLICATE_NICKNAME("4091","중복된 닉네임입니다.",HttpStatus.CONFLICT),
 
-    //500 클라이언트 오류
-    CLIENT_ERROR("5001", "클라이언트 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+    //ItemExceptions
+    ITEM_NOT_FOUND("4041","상품을 찾을 수 없습니다.",HttpStatus.NOT_FOUND),
+    ITEM_VALID_NOT_NULL("4001","제품 이름, 제품 설명, 가격을 입력해 주세요.",HttpStatus.BAD_REQUEST),
+    ITEM_VALID_NOT_BLANK("4002","제품 이름, 제품 설명은 비어있을 수 없습니다.",HttpStatus.BAD_REQUEST),
+    ITEM_NOT_ENOUGH_STOCK("4003","재고가 없습니다.",HttpStatus.BAD_REQUEST),
+
+    //CategoryExceptions
+    CATEGORY_NOT_FOUND("4041","카테고리를 찾을 수 없습니다.",HttpStatus.NOT_FOUND),
+    PARENT_NOT_FOUND("4042","상위 카테고리를 찾을 수 없습니다", HttpStatus.NOT_FOUND),
+
+    //OrderExceptions
+    ORDER_NOT_FOUND("4041","주문 정보를 찾을 수 없습니다.",HttpStatus.NOT_FOUND);
 
     private final String errorCode;         // 에러 코드
     private final String errorMessage;      // 에러 메시지

@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ExceptionResponse> handleCustomExceptionHandler(CustomException ex) {
-        log.warn("CustomException occurred!: ErrorCode = {}, Message = {}", ex.getErrorCode(), ex.getErrorMessage());
+        log.error("CustomException occurred!: ErrorCode = {}, Message = {}", ex.getErrorCode(), ex.getErrorMessage());
 
         ExceptionResponse exceptionResponse = ExceptionResponse.of(ex.getErrorCode(), ex.getErrorMessage());
 
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     //예외를 던지지 않은 예외 코드는 따로 작성
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<ExceptionResponse> handleMissingHeader(MissingRequestHeaderException ex) {
-        log.warn("MissingRequestHeaderException : {}", ex.getMessage());
+        log.error("MissingRequestHeaderException : {}", ex.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)

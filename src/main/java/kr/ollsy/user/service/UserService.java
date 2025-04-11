@@ -36,7 +36,7 @@ public class UserService {
     }
 
     private User findUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new CustomException(GlobalExceptionCode.NOT_FOUND));
+        return userRepository.findById(id).orElseThrow(() -> new CustomException(GlobalExceptionCode.USER_NOT_FOUND));
     }
 
     public UserResponse findUser(String providerId) {

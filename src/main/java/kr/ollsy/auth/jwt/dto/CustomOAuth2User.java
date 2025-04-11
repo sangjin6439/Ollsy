@@ -1,6 +1,6 @@
 package kr.ollsy.auth.jwt.dto;
 
-import kr.ollsy.auth.OAuth2UserInfo;
+import kr.ollsy.auth.info.OAuth2UserInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 

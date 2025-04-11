@@ -13,6 +13,10 @@ import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.ollsy.auth.info.GoogleUserInfo;
+import kr.ollsy.auth.info.KakaoUserInfo;
+import kr.ollsy.auth.info.NaverUserInfo;
+import kr.ollsy.auth.info.OAuth2UserInfo;
 import kr.ollsy.auth.jwt.JwtUtil;
 import kr.ollsy.auth.jwt.RefreshToken;
 import kr.ollsy.auth.jwt.RefreshTokenRepository;

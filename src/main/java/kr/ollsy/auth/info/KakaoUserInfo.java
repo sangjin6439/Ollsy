@@ -1,7 +1,8 @@
-package kr.ollsy.auth;
+package kr.ollsy.auth.info;
 
 import java.util.Map;
 
+import kr.ollsy.auth.info.OAuth2UserInfo;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

@@ -11,6 +11,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import kr.ollsy.category.domain.Category;
 import kr.ollsy.global.entity.DateEntity;
+import kr.ollsy.global.exception.CustomException;
+import kr.ollsy.global.exception.GlobalExceptionCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -70,19 +72,19 @@ public class Item extends DateEntity {
 
     private void validateNotNull(String name, String description, int price, int stock) {
         if (name == null || description == null || (Integer) price == null || (Integer) stock == null) {
-            throw new IllegalArgumentException("제품 이름, 제품 설명, 가격을 입력해 주세요.");
+            throw new CustomException(GlobalExceptionCode.ITEM_VALID_NOT_NULL);
         }
     }
 
     private void validateNotBlank(String name, String description) {
         if (name.isBlank() || description.isBlank()) {
-            throw new IllegalArgumentException("제품 이름, 제품 설명은 비어있을 수 없습니다");
+            throw new CustomException(GlobalExceptionCode.ITEM_VALID_NOT_BLANK);
         }
     }
 
     public void removeStock(int quantity) {
         if (this.stock < quantity) {
-            throw new IllegalArgumentException("재고가 부족합니다!");
+            throw new CustomException(GlobalExceptionCode.ITEM_NOT_ENOUGH_STOCK);
         }
         this.stock -= quantity;
     }

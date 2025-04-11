@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
 
-import kr.ollsy.auth.OAuth2UserInfo;
 import kr.ollsy.auth.jwt.dto.CustomOAuth2User;
 import kr.ollsy.order.dto.request.OrderRequest;
 import kr.ollsy.order.dto.response.OrderDetailResponse;
