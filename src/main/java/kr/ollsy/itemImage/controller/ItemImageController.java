@@ -1,7 +1,9 @@
 package kr.ollsy.itemImage.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,5 +21,11 @@ public class ItemImageController {
     @PostMapping
     public ResponseEntity<String> uploadItemImage(@ModelAttribute ItemImageRequest itemImageRequest) {
         return ResponseEntity.ok(itemImageService.uploadItemImage(itemImageRequest));
+    }
+
+    @DeleteMapping("/{fileName}")
+    public ResponseEntity<Void> deleteItemImage(@PathVariable("fileName") String fileName) {
+        itemImageService.deleteItemImage(fileName);
+        return ResponseEntity.noContent().build();
     }
 }

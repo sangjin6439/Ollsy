@@ -2,6 +2,7 @@ package kr.ollsy.itemImage.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
@@ -63,5 +64,11 @@ public class ItemImageService {
         } catch (IOException e) {
             throw new CustomException(GlobalExceptionCode.ITEM_IMAGE_BAD_REQUEST);
         }
+    }
+
+    @Transactional
+    public void deleteItemImage(String fileName) {
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
+        itemImageRepository.deleteItemImageByUrl(fileName);
     }
 }
