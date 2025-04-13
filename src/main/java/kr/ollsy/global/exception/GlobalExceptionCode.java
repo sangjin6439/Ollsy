@@ -30,7 +30,10 @@ public enum GlobalExceptionCode {
     PARENT_NOT_FOUND("4042","상위 카테고리를 찾을 수 없습니다", HttpStatus.NOT_FOUND),
 
     //OrderExceptions
-    ORDER_NOT_FOUND("4041","주문 정보를 찾을 수 없습니다.",HttpStatus.NOT_FOUND);
+    ORDER_NOT_FOUND("4041","주문 정보를 찾을 수 없습니다.",HttpStatus.NOT_FOUND),
+
+    //ItemImageExceptions
+    ITEM_IMAGE_BAD_REQUEST("4001","파일을 업로드할 수 없습니다.", HttpStatus.BAD_REQUEST);
 
     private final String errorCode;         // 에러 코드
     private final String errorMessage;      // 에러 메시지

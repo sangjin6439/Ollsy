@@ -28,8 +28,14 @@ public class ItemService {
     public ItemResponse createItem(ItemRequest itemRequest) {
         validCategoryIdIsNull(itemRequest.getCategoryId());
         Category category = findCategory(itemRequest.getCategoryId());
-        Item item = itemRequest.toItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock(), category);
-        itemRepository.save(item);
+        Item item = Item.builder()
+                .name(itemRequest.getName())
+                .description(itemRequest.getDescription())
+                .price(itemRequest.getPrice())
+                .stock(itemRequest.getStock())
+                .category(category)
+                .build();
+                itemRepository.save(item);
         return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName());
     }
 

@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // X-Frames-Options 비활성화 -> h2 데이터베이스 콘솔 사용 가능
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/test","/h2-console/**","/api/v1/items/**","/api/v1/categories/**").permitAll()
+                                .requestMatchers("/test","/h2-console/**","/api/v1/items/**","/api/v1/categories/**","/api/v1/itemImages/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> // OAuth2 로그인 기능에 대한 여러 설정의 진입점

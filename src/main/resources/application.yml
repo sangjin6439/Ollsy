@@ -4,7 +4,11 @@ server:
 spring:
   profiles:
     active: local
-
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
   config:
     import: optional:.env
 
@@ -77,3 +81,16 @@ jwt:
     expiration-time: ${JWT_ACCESS_TOKEN_EXPIRATION_TIME}
   refresh-token:
       expiration-time: ${JWT_REFRESH_TOKEN_EXPIRATION_TIME}
+
+#AWS S3
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: ollsy
+    stack:
+      auto: false

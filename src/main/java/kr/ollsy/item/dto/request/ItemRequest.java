@@ -25,7 +25,4 @@ public class ItemRequest {
 
     private Long categoryId;
 
-    public Item toItem(String name, String description, int price, int stock, Category category) {
-        return new Item(name, description, price, stock, category);
-    }
 }
