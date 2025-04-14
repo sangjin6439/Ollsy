@@ -1,5 +1,7 @@
 package kr.ollsy.item.service;
 
+import static java.util.stream.Collectors.toList;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,8 @@ import kr.ollsy.item.dto.request.ItemRequest;
 import kr.ollsy.item.dto.response.ItemListResponse;
 import kr.ollsy.item.dto.response.ItemResponse;
 import kr.ollsy.item.repository.ItemRepository;
+import kr.ollsy.itemImage.domain.ItemImage;
+import kr.ollsy.itemImage.repository.ItemImageRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,20 +27,31 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
+    private final ItemImageRepository itemImageRepository;
 
     @Transactional
     public ItemResponse createItem(ItemRequest itemRequest) {
         validCategoryIdIsNull(itemRequest.getCategoryId());
         Category category = findCategory(itemRequest.getCategoryId());
+        List<ItemImage> itemImageList = itemRequest.getItemImageId().stream()
+                .map(id -> itemImageRepository.findById(id)
+                        .orElseThrow(() -> new CustomException(GlobalExceptionCode.ITEM_IMAGE_NOT_FOUND)))
+                .toList();
         Item item = Item.builder()
                 .name(itemRequest.getName())
                 .description(itemRequest.getDescription())
                 .price(itemRequest.getPrice())
                 .stock(itemRequest.getStock())
                 .category(category)
+                .images(itemImageList)
                 .build();
-                itemRepository.save(item);
-        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName());
+
+        item.addImage(itemImageList);
+        itemRepository.save(item);
+
+        List<String> urlList= getUrlList(itemImageList);
+
+        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName(),urlList);
     }
 
     private void validCategoryIdIsNull(Long id) {
@@ -50,10 +65,17 @@ public class ItemService {
                 .orElseThrow(() -> new CustomException(GlobalExceptionCode.CATEGORY_NOT_FOUND));
     }
 
+    private List<String> getUrlList (List<ItemImage> itemImageList){
+        return itemImageList.stream()
+                .map(itemImage -> itemImage.getUrl())
+                .toList();
+    }
+
     @Transactional(readOnly = true)
     public ItemResponse findItem(Long id) {
         Item item = findItemById(id);
-        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName());
+        List<String> urlList =getUrlList(item.getImages());
+        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName(),urlList);
     }
 
     private Item findItemById(Long id) {
@@ -109,16 +131,16 @@ public class ItemService {
         }
     }
 
-    @Transactional
-    public ItemResponse updateItem(Long id, ItemRequest itemRequest) {
-        Item item = findItemById(id);
-        validCategoryIdIsNull(itemRequest.getCategoryId());
-        Category category = findCategory(itemRequest.getCategoryId());
-
-        item.updateItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock(), category);
-
-        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName());
-    }
+//    @Transactional
+//    public ItemResponse updateItem(Long id, ItemRequest itemRequest) {
+//        Item item = findItemById(id);
+//        validCategoryIdIsNull(itemRequest.getCategoryId());
+//        Category category = findCategory(itemRequest.getCategoryId());
+//
+//        item.updateItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock(), category);
+//
+//        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName());
+//    }
 
     @Transactional
     public void deleteItem(Long id) {

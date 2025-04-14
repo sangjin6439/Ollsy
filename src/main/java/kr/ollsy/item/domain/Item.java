@@ -1,5 +1,11 @@
 package kr.ollsy.item.domain;
 
+import org.springframework.security.core.parameters.P;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,11 +14,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import kr.ollsy.category.domain.Category;
 import kr.ollsy.global.entity.DateEntity;
 import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.global.exception.GlobalExceptionCode;
+import kr.ollsy.itemImage.domain.ItemImage;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,6 +55,9 @@ public class Item extends DateEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categories_id")
     private Category category;
+
+    @OneToMany(mappedBy = "item", orphanRemoval = true)
+    private List<ItemImage> images = new ArrayList<>();
 
     public Item(String name, String description, int price, int stock, Category category) {
         validate(name, description, price, stock);
@@ -91,5 +102,12 @@ public class Item extends DateEntity {
 
     public void addStock(int quantity) {
         this.stock += quantity;
+    }
+
+    public void addImage(List<ItemImage> itemImages) {
+        this.images = itemImages;
+        for (ItemImage itemImage : itemImages) {
+            itemImage.setItem(this);
+        }
     }
 }

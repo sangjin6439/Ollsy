@@ -2,6 +2,9 @@ package kr.ollsy.item.dto.request;
 
 import org.hibernate.validator.constraints.Length;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import kr.ollsy.category.domain.Category;
@@ -16,6 +19,7 @@ public class ItemRequest {
     @NotNull
     @Length(min = 2, max = 20)
     private String name;
+
     @NotNull
     private String description;
 
@@ -25,4 +29,5 @@ public class ItemRequest {
 
     private Long categoryId;
 
+    private List<Long> itemImageId = new ArrayList<>();
 }

@@ -1,5 +1,7 @@
 package kr.ollsy.item.dto.response;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,9 +18,10 @@ public class ItemResponse {
     private int price;
     private int stock;
     private String categoryName;
+    private List<String> ItemImageUrl;
 
     public static ItemResponse of(
-            Long id, String name, String description, int price, int stock, String categoryName
+            Long id, String name, String description, int price, int stock, String categoryName, List<String> itemImageUrl
     ){
         return ItemResponse.builder()
                 .id(id)
@@ -27,6 +30,7 @@ public class ItemResponse {
                 .price(price)
                 .stock(stock)
                 .categoryName(categoryName)
+                .ItemImageUrl(itemImageUrl)
                 .build();
     }
 }
