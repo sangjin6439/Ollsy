@@ -92,10 +92,13 @@ public class Item extends DateEntity {
         updateItemImages(itemImageList);
     }
 
-    private void updateItemImages(List<ItemImage> itemImageList) {
+    private void updateItemImages(List<ItemImage> itemImages) {
         this.images.clear();
-        if (itemImageList != null) {
-            this.images.addAll(itemImageList);
+        if (itemImages != null) {
+            for(ItemImage itemImage : itemImages){
+                itemImage.setItem(this);
+                this.images.add(itemImage);
+            }
         }
     }
 

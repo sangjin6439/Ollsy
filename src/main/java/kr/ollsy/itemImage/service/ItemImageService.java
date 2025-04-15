@@ -74,6 +74,7 @@ public class ItemImageService {
         String keyUrl = extractKeyFromUrl(url);
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, keyUrl));
     }
+
     private String extractKeyFromUrl(String url) {
         return url.substring(url.lastIndexOf("/") + 1);
     }

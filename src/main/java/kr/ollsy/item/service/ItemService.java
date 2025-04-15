@@ -50,9 +50,9 @@ public class ItemService {
         item.addImage(itemImageList);
         itemRepository.save(item);
 
-        List<String> urlList= getUrlList(itemImageList);
+        List<String> urlList = getUrlList(itemImageList);
 
-        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName(),urlList);
+        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName(), urlList);
     }
 
     private void validCategoryIdIsNull(Long id) {
@@ -73,7 +73,7 @@ public class ItemService {
                 .toList();
     }
 
-    private List<String> getUrlList (List<ItemImage> itemImageList){
+    private List<String> getUrlList(List<ItemImage> itemImageList) {
         return itemImageList.stream()
                 .map(ItemImage::getUrl)
                 .toList();
@@ -82,8 +82,8 @@ public class ItemService {
     @Transactional(readOnly = true)
     public ItemResponse findItem(Long id) {
         Item item = findItemById(id);
-        List<String> urlList =getUrlList(item.getImages());
-        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName(),urlList);
+        List<String> urlList = getUrlList(item.getImages());
+        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName(), urlList);
     }
 
     private Item findItemById(Long id) {
@@ -143,27 +143,38 @@ public class ItemService {
     @Transactional
     public ItemResponse updateItem(Long id, ItemRequest itemRequest) {
         Item item = findItemById(id);
-
         validCategoryIdIsNull(itemRequest.getCategoryId());
 
         Category category = findCategory(itemRequest.getCategoryId());
+        List<ItemImage> newImageList = getUploadImages(itemRequest.getItemImageId());
+        List<ItemImage> oldImageList = new ArrayList<>(item.getImages());
 
-        List<ItemImage> itemImageList = getUploadImages(itemRequest.getItemImageId());
+        item.updateItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock(), category, newImageList);
 
-        item.updateItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock(), category, itemImageList);
+        List<ItemImage> imagesToDelete = getImagesToDelete(oldImageList,newImageList);
 
-        List<String> urlList = getUrlList(itemImageList);
+        deleteImagesFromS3(imagesToDelete);
 
-        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName(),urlList);
+        List<String> urlList = getUrlList(item.getImages());
+        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName(), urlList);
     }
 
+    private List<ItemImage> getImagesToDelete(List<ItemImage> oldImages, List<ItemImage> newImages) {
+        return oldImages.stream()
+                .filter(old -> newImages.stream().noneMatch(newImg -> newImg.getId().equals(old.getId())))
+                .toList();
+    }
+
+    private void deleteImagesFromS3(List<ItemImage> imagesToDelete) {
+        for (ItemImage image : imagesToDelete) {
+            itemImageService.deleteItemImage(image.getUrl());
+        }
+    }
     @Transactional
     public void deleteItem(Long id) {
         Item item = findItemById(id);
 
-        for(ItemImage itemImage: item.getImages()){
-           itemImageService.deleteItemImage(itemImage.getUrl());
-        }
+        deleteImagesFromS3(item.getImages());
 
         itemRepository.deleteById(id);
     }
