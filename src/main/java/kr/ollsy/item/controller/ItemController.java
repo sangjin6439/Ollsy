@@ -60,13 +60,13 @@ public class ItemController {
         return ResponseEntity.ok(itemService.findItemsByCategory(id, includeSub));
     }
 
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<ItemResponse> updateItem(
-//            @PathVariable("id") Long id,
-//            @RequestBody ItemRequest itemRequest
-//    ){
-//        return ResponseEntity.ok(itemService.updateItem(id, itemRequest));
-//    }
+    @PatchMapping("/{id}")
+    public ResponseEntity<ItemResponse> updateItem(
+            @PathVariable("id") Long id,
+            @RequestBody @Valid ItemRequest itemRequest
+    ){
+        return ResponseEntity.ok(itemService.updateItem(id, itemRequest));
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(

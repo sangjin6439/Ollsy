@@ -50,7 +50,7 @@ public class Category {
     private Category parent;
 
     @Builder.Default
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parent")
     private List<Category> children = new ArrayList<>();
 
     //편의 메서드

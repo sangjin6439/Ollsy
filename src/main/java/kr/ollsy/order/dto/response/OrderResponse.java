@@ -1,5 +1,6 @@
 package kr.ollsy.order.dto.response;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import kr.ollsy.order_item.dto.request.OrderItemRequest;
@@ -17,4 +18,5 @@ public class OrderResponse {
     private Long id;
     private List<OrderItemResponse> orderItemResponseList;
     private int totalPrice;
+    private LocalDateTime orderAt;
 }

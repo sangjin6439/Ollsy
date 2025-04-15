@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import kr.ollsy.itemImage.dto.request.ItemImageRequest;
+import kr.ollsy.itemImage.dto.reponse.ItemImageResponse;
 import kr.ollsy.itemImage.service.ItemImageService;
 import lombok.RequiredArgsConstructor;
 
@@ -19,13 +21,7 @@ public class ItemImageController {
     private final ItemImageService itemImageService;
 
     @PostMapping
-    public ResponseEntity<String> uploadItemImage(@ModelAttribute ItemImageRequest itemImageRequest) {
-        return ResponseEntity.ok(itemImageService.uploadItemImage(itemImageRequest));
-    }
-
-    @DeleteMapping("/{fileName}")
-    public ResponseEntity<Void> deleteItemImage(@PathVariable("fileName") String fileName) {
-        itemImageService.deleteItemImage(fileName);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ItemImageResponse> uploadItemImage(@RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(itemImageService.uploadItemImage(file));
     }
 }

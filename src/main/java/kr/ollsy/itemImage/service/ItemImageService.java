@@ -16,7 +16,7 @@ import java.util.UUID;
 
 import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.global.exception.GlobalExceptionCode;
-import kr.ollsy.itemImage.dto.request.ItemImageRequest;
+import kr.ollsy.itemImage.dto.reponse.ItemImageResponse;
 import kr.ollsy.itemImage.domain.ItemImage;
 import kr.ollsy.itemImage.repository.ItemImageRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,31 +32,34 @@ public class ItemImageService {
     private final ItemImageRepository itemImageRepository;
 
     @Transactional
-    public String uploadItemImage(ItemImageRequest itemImageRequest) {
+    public ItemImageResponse uploadItemImage(MultipartFile file) {
 
-        String uploadUrl = uploadFile(itemImageRequest.getMultipartFile());
+        String uploadUrl = uploadFile(file);
 
         ItemImage itemImage = ItemImage.builder()
-                .name(itemImageRequest.getName())
                 .url(uploadUrl)
                 .build();
+
         itemImageRepository.save(itemImage);
 
-        return uploadUrl;
+        return ItemImageResponse.builder()
+                .id(itemImage.getId())
+                .url(itemImage.getUrl())
+                .build();
     }
 
-    private String uploadFile(MultipartFile multipartFile) {
+    private String uploadFile(MultipartFile file) {
         try {
-            String originalName = multipartFile.getOriginalFilename();
+            String originalName = file.getOriginalFilename();
             String uuid = UUID.randomUUID().toString();
             String ext = originalName.substring(originalName.lastIndexOf("."));
             String fileName = "item-images" + uuid + ext;
 
             ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentLength(multipartFile.getSize());
-            metadata.setContentType(multipartFile.getContentType());
+            metadata.setContentLength(file.getSize());
+            metadata.setContentType(file.getContentType());
 
-            amazonS3.putObject(new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), metadata)
+            amazonS3.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
 
             return amazonS3.getUrl(bucket, fileName).toString();
@@ -67,8 +70,11 @@ public class ItemImageService {
     }
 
     @Transactional
-    public void deleteItemImage(String fileName) {
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
-        itemImageRepository.deleteItemImageByUrl(fileName);
+    public void deleteItemImage(String url) {
+        String keyUrl = extractKeyFromUrl(url);
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, keyUrl));
+    }
+    private String extractKeyFromUrl(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
     }
 }

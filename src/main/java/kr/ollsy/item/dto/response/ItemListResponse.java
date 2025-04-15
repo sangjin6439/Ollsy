@@ -18,5 +18,5 @@ public class ItemListResponse {
     private int price;
     private int stock;
     private String categoryName;
-    private List<String> ItemImageUrl;
+    private List<String> itemImageUrl;
 }

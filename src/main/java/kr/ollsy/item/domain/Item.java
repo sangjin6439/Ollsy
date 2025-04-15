@@ -1,7 +1,5 @@
 package kr.ollsy.item.domain;
 
-import org.springframework.security.core.parameters.P;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,19 +54,11 @@ public class Item extends DateEntity {
     @JoinColumn(name = "categories_id")
     private Category category;
 
-    @OneToMany(mappedBy = "item", orphanRemoval = true)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemImage> images = new ArrayList<>();
 
     public Item(String name, String description, int price, int stock, Category category) {
         validate(name, description, price, stock);
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.stock = stock;
-        this.category = category;
-    }
-
-    public void updateItem(String name, String description, int price, int stock, Category category) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -90,6 +80,22 @@ public class Item extends DateEntity {
     private void validateNotBlank(String name, String description) {
         if (name.isBlank() || description.isBlank()) {
             throw new CustomException(GlobalExceptionCode.ITEM_VALID_NOT_BLANK);
+        }
+    }
+
+    public void updateItem(String name, String description, int price, int stock, Category category, List<ItemImage> itemImageList) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+        this.category = category;
+        updateItemImages(itemImageList);
+    }
+
+    private void updateItemImages(List<ItemImage> itemImageList) {
+        this.images.clear();
+        if (itemImageList != null) {
+            this.images.addAll(itemImageList);
         }
     }
 

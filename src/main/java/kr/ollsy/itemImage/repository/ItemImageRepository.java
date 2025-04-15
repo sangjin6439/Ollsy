@@ -11,8 +11,4 @@ import kr.ollsy.itemImage.domain.ItemImage;
 
 @Repository
 public interface ItemImageRepository extends JpaRepository<ItemImage,Long> {
-
-    @Modifying
-    @Query("DELETE FROM ItemImage it WHERE it.url = :url")
-    int deleteItemImageByUrl(@Param("url") String fileName);
 }

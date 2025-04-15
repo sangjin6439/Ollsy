@@ -103,6 +103,7 @@ public class OrderService {
                         .id(o.getId())
                         .orderItemResponseList(orderItemListToDto(o.getOrderItems()))
                         .totalPrice(o.getTotalPrice())
+                        .orderAt(o.getCreateAt())
                         .build())
                 .toList();
     }

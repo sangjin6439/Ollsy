@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import kr.ollsy.global.entity.DateEntity;
 import kr.ollsy.item.domain.Item;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,15 +21,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "item_images")
-public class ItemImage {
+public class ItemImage extends DateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "itemImages_id")
     private Long id;
-
-    @Column(name = "name")
-    private String name;
 
     @Column(name = "url")
     private String url;

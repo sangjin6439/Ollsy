@@ -2,6 +2,8 @@ package kr.ollsy.item.service;
 
 import static java.util.stream.Collectors.toList;
 
+import com.amazonaws.services.s3.AmazonS3;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ import kr.ollsy.item.dto.response.ItemResponse;
 import kr.ollsy.item.repository.ItemRepository;
 import kr.ollsy.itemImage.domain.ItemImage;
 import kr.ollsy.itemImage.repository.ItemImageRepository;
+import kr.ollsy.itemImage.service.ItemImageService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -28,15 +31,13 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
     private final ItemImageRepository itemImageRepository;
+    private final ItemImageService itemImageService;
 
     @Transactional
     public ItemResponse createItem(ItemRequest itemRequest) {
         validCategoryIdIsNull(itemRequest.getCategoryId());
         Category category = findCategory(itemRequest.getCategoryId());
-        List<ItemImage> itemImageList = itemRequest.getItemImageId().stream()
-                .map(id -> itemImageRepository.findById(id)
-                        .orElseThrow(() -> new CustomException(GlobalExceptionCode.ITEM_IMAGE_NOT_FOUND)))
-                .toList();
+        List<ItemImage> itemImageList = getUploadImages(itemRequest.getItemImageId());
         Item item = Item.builder()
                 .name(itemRequest.getName())
                 .description(itemRequest.getDescription())
@@ -65,9 +66,16 @@ public class ItemService {
                 .orElseThrow(() -> new CustomException(GlobalExceptionCode.CATEGORY_NOT_FOUND));
     }
 
+    private List<ItemImage> getUploadImages(List<Long> itemImageIds) {
+        return itemImageIds.stream()
+                .map(imageId -> itemImageRepository.findById(imageId)
+                        .orElseThrow(() -> new CustomException(GlobalExceptionCode.ITEM_IMAGE_NOT_FOUND)))
+                .toList();
+    }
+
     private List<String> getUrlList (List<ItemImage> itemImageList){
         return itemImageList.stream()
-                .map(itemImage -> itemImage.getUrl())
+                .map(ItemImage::getUrl)
                 .toList();
     }
 
@@ -98,6 +106,7 @@ public class ItemService {
                         .price(item.getPrice())
                         .stock(item.getStock())
                         .categoryName(item.getCategory().getName())
+                        .itemImageUrl(getUrlList(item.getImages()))
                         .build())
                 .toList();
     }
@@ -131,19 +140,31 @@ public class ItemService {
         }
     }
 
-//    @Transactional
-//    public ItemResponse updateItem(Long id, ItemRequest itemRequest) {
-//        Item item = findItemById(id);
-//        validCategoryIdIsNull(itemRequest.getCategoryId());
-//        Category category = findCategory(itemRequest.getCategoryId());
-//
-//        item.updateItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock(), category);
-//
-//        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName());
-//    }
+    @Transactional
+    public ItemResponse updateItem(Long id, ItemRequest itemRequest) {
+        Item item = findItemById(id);
+
+        validCategoryIdIsNull(itemRequest.getCategoryId());
+
+        Category category = findCategory(itemRequest.getCategoryId());
+
+        List<ItemImage> itemImageList = getUploadImages(itemRequest.getItemImageId());
+
+        item.updateItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock(), category, itemImageList);
+
+        List<String> urlList = getUrlList(itemImageList);
+
+        return ItemResponse.of(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getStock(), item.getCategory().getName(),urlList);
+    }
 
     @Transactional
     public void deleteItem(Long id) {
+        Item item = findItemById(id);
+
+        for(ItemImage itemImage: item.getImages()){
+           itemImageService.deleteItemImage(itemImage.getUrl());
+        }
+
         itemRepository.deleteById(id);
     }
 }
