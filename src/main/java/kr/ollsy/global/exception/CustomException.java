@@ -15,6 +15,7 @@ public class CustomException extends RuntimeException {
     private final String errorMessage; //에러 메시지
 
     public CustomException(GlobalExceptionCode globalExceptionCode) {
+        super(globalExceptionCode.getErrorMessage());
         this.httpStatus = globalExceptionCode.getHttpStatus();
         this.errorCode = globalExceptionCode.getErrorCode();
         this.errorMessage = globalExceptionCode.getErrorMessage();
