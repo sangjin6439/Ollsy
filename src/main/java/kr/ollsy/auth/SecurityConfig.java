@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -17,6 +19,7 @@ import java.util.Collections;
 
 import kr.ollsy.auth.jwt.JwtFilter;
 import kr.ollsy.auth.jwt.JwtUtil;
+import kr.ollsy.global.exception.CustomAccessDeniedHandler;
 import kr.ollsy.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -58,8 +61,9 @@ public class SecurityConfig {
                         oauth
                                 .successHandler(oAuthLoginSuccessHandler) // 로그인 성공 시 핸들러
                                 .failureHandler(oAuthLoginFailureHandler) // 로그인 실패 시 핸들러
-                ).addFilterBefore(new JwtFilter(jwtUtil, userRepository), UsernamePasswordAuthenticationFilter.class)
-        ;
+                )
+                .addFilterBefore(new JwtFilter(jwtUtil, userRepository), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(eh-> eh.accessDeniedHandler(new CustomAccessDeniedHandler()));
         return httpSecurity.build();
     }
 }

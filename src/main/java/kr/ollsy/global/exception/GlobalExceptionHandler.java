@@ -24,7 +24,6 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(ex.getHttpStatus()).body(exceptionResponse);
     }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleGeneralException(Exception ex) {
         log.error("UnDefined exception occurred!", ex.getMessage(), ex);
