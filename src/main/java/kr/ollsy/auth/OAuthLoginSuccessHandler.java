@@ -22,6 +22,7 @@ import kr.ollsy.auth.jwt.RefreshToken;
 import kr.ollsy.auth.jwt.RefreshTokenRepository;
 import kr.ollsy.auth.jwt.dto.LoginResponse;
 import kr.ollsy.global.util.NicknameGenerator;
+import kr.ollsy.user.domain.Role;
 import kr.ollsy.user.domain.User;
 import kr.ollsy.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -85,6 +86,7 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
                     .name(name)
                     .nickname(NicknameGenerator.generateNickname())
                     .email(email)
+                    .role(Role.USER)
                     .provider(provider)
                     .providerId(providerId)
                     .build();

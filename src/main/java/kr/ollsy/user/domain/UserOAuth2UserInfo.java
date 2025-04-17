@@ -29,4 +29,6 @@ public class UserOAuth2UserInfo implements OAuth2UserInfo {
     public String getEmail() {
         return user.getEmail();
     }
+
+
 }

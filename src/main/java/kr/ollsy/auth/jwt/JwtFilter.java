@@ -40,9 +40,9 @@ public class JwtFilter extends OncePerRequestFilter {
             User user = userRepository.findById(userId).orElseThrow(()-> new CustomException(GlobalExceptionCode.USER_NOT_FOUND));
 
             UserOAuth2UserInfo userInfo = new UserOAuth2UserInfo(user);
-            CustomOAuth2User principal = new CustomOAuth2User(userInfo);
+            CustomOAuth2User principal = new CustomOAuth2User(userInfo,user);
 
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal,null,null);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal,null,principal.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
         filterChain.doFilter(request,response);
