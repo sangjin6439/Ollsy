@@ -70,12 +70,22 @@ public class ItemImageService {
     }
 
     @Transactional
-    public void deleteItemImage(String url) {
+    public void deleteItemImageInS3(String url) {
         String keyUrl = extractKeyFromUrl(url);
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, keyUrl));
     }
 
     private String extractKeyFromUrl(String url) {
         return url.substring(url.lastIndexOf("/") + 1);
+    }
+
+    public void deleteItemImage(Long id) {
+        ItemImage itemImage = itemImageRepository.findById(id)
+                .orElseThrow(()-> new CustomException(GlobalExceptionCode.ITEM_IMAGE_NOT_FOUND));
+
+        String keyUrl = extractKeyFromUrl(itemImage.getUrl());
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, keyUrl));
+
+        itemImageRepository.deleteById(id);
     }
 }

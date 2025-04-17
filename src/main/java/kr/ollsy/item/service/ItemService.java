@@ -1,9 +1,5 @@
 package kr.ollsy.item.service;
 
-import static java.util.stream.Collectors.toList;
-
-import com.amazonaws.services.s3.AmazonS3;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -167,7 +163,7 @@ public class ItemService {
 
     private void deleteImagesFromS3(List<ItemImage> imagesToDelete) {
         for (ItemImage image : imagesToDelete) {
-            itemImageService.deleteItemImage(image.getUrl());
+            itemImageService.deleteItemImageInS3(image.getUrl());
         }
     }
     @Transactional
