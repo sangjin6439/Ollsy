@@ -102,6 +102,12 @@ public class Item extends DateEntity {
         }
     }
 
+    public void validateQuantity(int quantity){
+        if(quantity<=0){
+            throw new CustomException(GlobalExceptionCode.ITEM_INVALID_QUANTITY);
+        }
+    }
+
     public void removeStock(int quantity) {
         if (this.stock < quantity) {
             throw new CustomException(GlobalExceptionCode.ITEM_NOT_ENOUGH_STOCK);

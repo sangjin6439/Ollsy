@@ -51,7 +51,6 @@ public class Order extends DateEntity {
     }
     //편의 메서드
     public void addOrderItem(OrderItem orderItem) {
-        this.orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
 }

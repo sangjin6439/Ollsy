@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
 
+import jakarta.validation.Valid;
 import kr.ollsy.auth.jwt.dto.CustomOAuth2User;
 import kr.ollsy.order.dto.request.OrderRequest;
 import kr.ollsy.order.dto.response.OrderDetailResponse;
@@ -30,7 +31,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(
             @AuthenticationPrincipal CustomOAuth2User user,
-            @RequestBody OrderRequest orderRequest
+            @RequestBody @Valid OrderRequest orderRequest
             ) {
         OrderResponse orderResponse = orderService.createOrder(user.getName(),orderRequest);
         return ResponseEntity.created(URI.create("/api/v1/order/"+orderResponse.getId())).body(orderResponse);

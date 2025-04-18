@@ -33,10 +33,11 @@ public class OrderService {
     public OrderResponse createOrder(String providerId, OrderRequest orderRequest) {
 
         User user = userRepository.findByProviderId(providerId);
-        List<OrderItem> orderItemList = orderRequest.getOrderItemsList().stream()
+        List<OrderItem> orderItemList = orderRequest.getOrderItemList().stream()
                 .map(orderItemRequest -> {
                     Item item = itemRepository.findById(orderItemRequest.getItemId())
                             .orElseThrow(() -> new CustomException(GlobalExceptionCode.ITEM_NOT_FOUND));
+                    item.validateQuantity(orderItemRequest.getQuantity());
                     item.removeStock(orderItemRequest.getQuantity());
                     return OrderItem.of(item, orderItemRequest.getQuantity());
                 })
@@ -52,6 +53,7 @@ public class OrderService {
                 .totalPrice(totalPrice)
                 .build();
 
+        orderItemList.forEach(order::addOrderItem);
         user.addOrder(order);
 
         orderRepository.save(order);
@@ -62,6 +64,7 @@ public class OrderService {
                 .id(order.getId())
                 .orderItemResponseList(orderItemResponseList)
                 .totalPrice(totalPrice)
+                .orderAt(order.getCreateAt())
                 .build();
     }
 

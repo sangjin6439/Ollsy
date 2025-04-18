@@ -25,6 +25,7 @@ public enum GlobalExceptionCode {
     ITEM_VALID_NOT_NULL("4001","제품 이름, 제품 설명, 가격을 입력해 주세요.",HttpStatus.BAD_REQUEST),
     ITEM_VALID_NOT_BLANK("4002","제품 이름, 제품 설명은 비어있을 수 없습니다.",HttpStatus.BAD_REQUEST),
     ITEM_NOT_ENOUGH_STOCK("4003","재고가 없습니다.",HttpStatus.BAD_REQUEST),
+    ITEM_INVALID_QUANTITY("4004", "수량은 1개 이상이어야 합니다.", HttpStatus.BAD_REQUEST),
 
     //CategoryExceptions
     CATEGORY_NOT_FOUND("4041","카테고리를 찾을 수 없습니다.",HttpStatus.NOT_FOUND),
