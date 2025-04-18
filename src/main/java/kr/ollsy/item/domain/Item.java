@@ -35,7 +35,7 @@ public class Item extends DateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "items_id")
+    @Column(name = "item_id")
     Long id;
 
     @Column(nullable = false)
@@ -51,7 +51,7 @@ public class Item extends DateEntity {
     int stock;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categories_id")
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)

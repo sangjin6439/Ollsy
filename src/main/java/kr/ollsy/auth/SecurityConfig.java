@@ -4,6 +4,7 @@ import com.nimbusds.oauth2.sdk.auth.JWTAuthentication;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -53,8 +54,12 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // X-Frames-Options 비활성화 -> h2 데이터베이스 콘솔 사용 가능
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/test","/h2-console/**","/api/v1/items/**","/api/v1/itemImages/**").permitAll()
-                                .requestMatchers("/api/v1/categories/**").hasRole("ADMIN")
+                                .requestMatchers("/test","/h2-console/**").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/api/v1/item/**").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/api/v1/category/**","/api/v1/item/**","/api/v1/itemImage/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PATCH,"/api/v1/item/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE,"/api/v1/category/**","/api/v1/item/**","/api/v1/itemImage/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/order/**","/api/v1/user/**").hasRole("USER")
                                 .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> // OAuth2 로그인 기능에 대한 여러 설정의 진입점

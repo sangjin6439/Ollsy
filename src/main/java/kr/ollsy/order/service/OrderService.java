@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.global.exception.GlobalExceptionCode;
@@ -39,7 +40,7 @@ public class OrderService {
                     item.removeStock(orderItemRequest.getQuantity());
                     return OrderItem.of(item, orderItemRequest.getQuantity());
                 })
-                .toList();
+                .collect(Collectors.toList());
 
         int totalPrice = orderItemList.stream()
                 .mapToInt(o -> o.getItem().getPrice() * o.getQuantity())
@@ -50,8 +51,6 @@ public class OrderService {
                 .orderItems(orderItemList)
                 .totalPrice(totalPrice)
                 .build();
-
-        orderItemList.forEach(order::addOrderItem);
 
         user.addOrder(order);
 
@@ -72,7 +71,7 @@ public class OrderService {
                         .price(o.getItem().getPrice())
                         .quantity(o.getQuantity())
                         .build())
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -105,7 +104,7 @@ public class OrderService {
                         .totalPrice(o.getTotalPrice())
                         .orderAt(o.getCreateAt())
                         .build())
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Transactional

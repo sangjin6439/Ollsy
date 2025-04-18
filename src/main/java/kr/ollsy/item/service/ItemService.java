@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import kr.ollsy.category.domain.Category;
 import kr.ollsy.category.repository.CategoryRepository;
@@ -66,13 +67,13 @@ public class ItemService {
         return itemImageIds.stream()
                 .map(imageId -> itemImageRepository.findById(imageId)
                         .orElseThrow(() -> new CustomException(GlobalExceptionCode.ITEM_IMAGE_NOT_FOUND)))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     private List<String> getUrlList(List<ItemImage> itemImageList) {
         return itemImageList.stream()
                 .map(ItemImage::getUrl)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -104,7 +105,7 @@ public class ItemService {
                         .categoryName(item.getCategory().getName())
                         .itemImageUrl(getUrlList(item.getImages()))
                         .build())
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -158,7 +159,7 @@ public class ItemService {
     private List<ItemImage> getImagesToDelete(List<ItemImage> oldImages, List<ItemImage> newImages) {
         return oldImages.stream()
                 .filter(old -> newImages.stream().noneMatch(newImg -> newImg.getId().equals(old.getId())))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     private void deleteImagesFromS3(List<ItemImage> imagesToDelete) {

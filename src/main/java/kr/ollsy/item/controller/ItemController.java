@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/items")
+@RequestMapping("/api/v1/item")
 public class ItemController {
 
     private final ItemService itemService;
@@ -51,7 +51,7 @@ public class ItemController {
         return ResponseEntity.ok(itemService.findItems());
     }
 
-    @GetMapping("/categories/{id}")
+    @GetMapping("/category/{id}")
     public ResponseEntity<List<ItemListResponse>> findItemsByCategory(
             @PathVariable("id") Long id,
             @RequestParam(value = "includeSub", required = false, defaultValue = "false") boolean includeSub

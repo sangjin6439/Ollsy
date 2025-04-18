@@ -18,6 +18,7 @@ public enum GlobalExceptionCode {
     //UserExceptions
     USER_NOT_FOUND("4041","사용자 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     DUPLICATE_NICKNAME("4091","중복된 닉네임입니다.",HttpStatus.CONFLICT),
+    DUPLICATE_EMAIL("4092","이미 가입된 이메일입니다", HttpStatus.CONFLICT),
 
     //ItemExceptions
     ITEM_NOT_FOUND("4041","상품을 찾을 수 없습니다.",HttpStatus.NOT_FOUND),

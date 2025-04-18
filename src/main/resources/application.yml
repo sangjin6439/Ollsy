@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  sql:
+    init:
+      mode: never
   profiles:
     active: local
   servlet:
@@ -27,6 +30,7 @@ spring:
         highlight_sql: true
     hibernate:
       ddl-auto: create
+#    defer-datasource-initialization: true
 
   security:
     oauth2:
@@ -94,3 +98,6 @@ cloud:
       bucket: ollsy
     stack:
       auto: false
+
+admin:
+  email: ${ADMIN_EMAIL}

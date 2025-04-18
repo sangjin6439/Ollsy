@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,6 +22,9 @@ import kr.ollsy.auth.jwt.JwtUtil;
 import kr.ollsy.auth.jwt.RefreshToken;
 import kr.ollsy.auth.jwt.RefreshTokenRepository;
 import kr.ollsy.auth.jwt.dto.LoginResponse;
+import kr.ollsy.global.exception.CustomException;
+import kr.ollsy.global.exception.GlobalExceptionCode;
+import kr.ollsy.global.exception.GlobalExceptionHandler;
 import kr.ollsy.global.util.NicknameGenerator;
 import kr.ollsy.user.domain.Role;
 import kr.ollsy.user.domain.User;
@@ -34,13 +38,16 @@ import lombok.extern.slf4j.Slf4j;
 public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Value("${jwt.redirect}")
-    private String REDIRECT_URI; // 프론트엔드로 Jwt 토큰을 리다이렉트할 URI
+    private String redirectUri; // 프론트엔드로 Jwt 토큰을 리다이렉트할 URI
 
     @Value("${jwt.access-token.expiration-time}")
-    private long ACCESS_TOKEN_EXPIRATION_TIME; // 액세스 토큰 만료 시간
+    private long accessTokenExpirationTime; // 액세스 토큰 만료 시간
 
     @Value("${jwt.refresh-token.expiration-time}")
-    private long REFRESH_TOKEN_EXPIRATION_TIME; // 리프레쉬 토큰 만료 시간
+    private long refreshTokenExpirationTime; // 리프레쉬 토큰 만료 시간
+
+    @Value("${admin.email}")
+    private String adminEmail;
 
     private OAuth2UserInfo oAuth2UserInfo = null;
 
@@ -75,18 +82,18 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         String name = oAuth2UserInfo.getName();
         String email = oAuth2UserInfo.getEmail();
 
-        User existUser = userRepository.findByProviderId(providerId);
+        Optional<User> existUser = userRepository.findByEmail(email);
         User user;
 
-        if (existUser == null) {
+        if (!existUser.isPresent()) {
             // 신규 유저인 경우
             log.info("신규 유저입니다. 등록을 진행합니다.");
-            
+
             user = User.builder()
                     .name(name)
                     .nickname(NicknameGenerator.generateNickname())
                     .email(email)
-                    .role(Role.USER)
+                    .role(email.equals(adminEmail) ? Role.ADMIN : Role.USER)
                     .provider(provider)
                     .providerId(providerId)
                     .build();
@@ -94,8 +101,14 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         } else {
             // 기존 유저인 경우
             log.info("기존 유저입니다.");
-            refreshTokenRepository.deleteByUserId(existUser.getId());
-            user = existUser;
+
+            if (!existUser.get().getProvider().equals(provider)) {
+                log.error("이미 다른 소셜 계정으로 등록된 유저입니다.");
+                throw new CustomException(GlobalExceptionCode.DUPLICATE_EMAIL);
+            }
+
+            refreshTokenRepository.deleteByUserId(existUser.get().getId());
+            user = existUser.get();
         }
 
         log.info("유저 이름 : {}", name);
@@ -104,7 +117,7 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         log.info("PROVIDER_ID : {}", providerId);
 
         // 리프레쉬 토큰 발급 후 저장
-        String refreshToken = jwtUtil.generateRefreshToken(user.getId(), REFRESH_TOKEN_EXPIRATION_TIME);
+        String refreshToken = jwtUtil.generateRefreshToken(user.getId(), refreshTokenExpirationTime);
 
         RefreshToken newRefreshToken = RefreshToken.builder()
                 .userId(user.getId())
@@ -113,7 +126,7 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         refreshTokenRepository.save(newRefreshToken);
 
         // 액세스 토큰 발급
-        String accessToken = jwtUtil.generateAccessToken(user.getId(), ACCESS_TOKEN_EXPIRATION_TIME);
+        String accessToken = jwtUtil.generateAccessToken(user.getId(), accessTokenExpirationTime);
 
         //유저 정보 및 토큰을 담아 리다이렉트
         LoginResponse loginResponse = LoginResponse.of(

@@ -32,7 +32,7 @@ public class User extends DateEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "users_id")
+    @Column(name = "user_id")
     private Long id;
 
     @Column(nullable = false) //이런 규칙들은 엔티티가 변경될 수 있는 dto로 다 옮기고 entity에 혼잡을 주지 않기

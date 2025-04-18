@@ -33,15 +33,15 @@ public class Order extends DateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "orders_id")
+    @Column(name = "order_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_Id")
+    @JoinColumn(name = "user_Id")
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //OrderItem과 생명주기가 같음
-    private List<OrderItem> orderItems;
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     private int totalPrice;
 
@@ -51,9 +51,6 @@ public class Order extends DateEntity {
     }
     //편의 메서드
     public void addOrderItem(OrderItem orderItem) {
-        if (this.orderItems == null) {
-            this.orderItems = new ArrayList<>();
-        }
         this.orderItems.add(orderItem);
         orderItem.setOrder(this);
     }

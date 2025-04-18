@@ -1,6 +1,7 @@
 package kr.ollsy.order.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import kr.ollsy.order_item.dto.response.OrderItemResponse;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OrderDetailResponse {
     private Long id;
-    private List<OrderItemResponse> orderItemResponseList;
+    private List<OrderItemResponse> orderItemResponseList = new ArrayList<>();
     private int totalPrice;
     private LocalDateTime orderAt;
 }

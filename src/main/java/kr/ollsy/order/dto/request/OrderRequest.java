@@ -1,5 +1,6 @@
 package kr.ollsy.order.dto.request;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kr.ollsy.order_item.dto.request.OrderItemRequest;
@@ -9,5 +10,5 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class OrderRequest {
-    private List<OrderItemRequest> orderItemsList;
+    private List<OrderItemRequest> orderItemsList = new ArrayList<>();
 }

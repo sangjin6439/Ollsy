@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import kr.ollsy.category.domain.Category;
 import kr.ollsy.category.dto.request.CategoryRequest;
@@ -67,7 +68,7 @@ public class CategoryService {
         return categoryList.stream()
                 .filter(category -> category.getDepth() == 0)
                 .map(c -> CategoryTreeResponse.of(c))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Transactional
