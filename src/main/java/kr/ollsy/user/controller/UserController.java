@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import kr.ollsy.auth.jwt.dto.CustomOAuth2User;
 import kr.ollsy.user.dto.request.UserNicknameUpdateRequest;
@@ -24,6 +25,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
+    @Operation(summary = "유저 정보 확인", description = "유저의 정보를 확인합니다.")
     public ResponseEntity<UserResponse> findUser(
             @AuthenticationPrincipal CustomOAuth2User user
     ) {
