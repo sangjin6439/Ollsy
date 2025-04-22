@@ -16,5 +16,6 @@ public class CategoryRequest {
     @Size(min = 2)
     private String name;
 
+    @NotNull
     private Long parentId;
 }

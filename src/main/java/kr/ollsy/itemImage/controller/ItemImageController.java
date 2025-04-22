@@ -1,5 +1,6 @@
 package kr.ollsy.itemImage.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class ItemImageController {
     private final ItemImageService itemImageService;
 
-    @PostMapping
+    @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "이미지 정보 저장", description = "이미지 정보를 S3와 DB에 저장합니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "유저 정보 확인 완료", content = {@Content(mediaType = "application/json")}),
@@ -36,6 +37,11 @@ public class ItemImageController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "이미지 삭제", description = "이미지를 S3와 DB에서 삭제합니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "이미지 삭제 완료", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", description = "이미지를 찾을 수 없습니다", content = @Content(mediaType = "application/json")),
+    })
     public ResponseEntity<Void> deleteItemImage(@PathVariable("id") Long id) {
         itemImageService.deleteItemImage(id);
         return ResponseEntity.noContent().build();

@@ -32,7 +32,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    @Operation(summary = "유저 정보 확인", description = "유저의 정보를 확인합니다.")
+    @Operation(summary = "유저 정보 확인", description = "유저의 정보를 확인합니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "유저 정보 확인 완료", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "401", description = "로그인하지 않은 유저가 시도했습니다", content = @Content(mediaType = "application/json")),
@@ -44,6 +44,11 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
+    @Operation(summary = "유저 Nickname 변경", description = "유저 Nickname을 변경합니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "유저 Nickname 변경 완료", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "401", description = "로그인하지 않은 유저가 시도했습니다", content = @Content(mediaType = "application/json")),
+    })
     public ResponseEntity<String> userNicknameUpdate(
             @PathVariable("id") Long id,
             @RequestBody @Valid UserNicknameUpdateRequest nicknameUpdateRequest

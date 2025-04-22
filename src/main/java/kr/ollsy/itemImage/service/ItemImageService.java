@@ -79,6 +79,7 @@ public class ItemImageService {
         return url.substring(url.lastIndexOf("/") + 1);
     }
 
+    @Transactional
     public void deleteItemImage(Long id) {
         ItemImage itemImage = itemImageRepository.findById(id)
                 .orElseThrow(()-> new CustomException(GlobalExceptionCode.ITEM_IMAGE_NOT_FOUND));

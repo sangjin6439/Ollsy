@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.ollsy.auth.jwt.dto.CustomOAuth2User;
@@ -31,6 +35,11 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
+    @Operation(summary = "주문 생성", description = "주문을 생성합니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "주문 생성 완료", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "401", description = "로그인하지 않은 유저가 요청했습니다", content = @Content(mediaType = "application/json")),
+    })
     public ResponseEntity<OrderResponse> createOrder(
             @AuthenticationPrincipal CustomOAuth2User user,
             @RequestBody @Valid OrderRequest orderRequest
@@ -40,6 +49,11 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "주문 상세 정보 확인", description = "주문 상세 정보를 확인합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "모든 주문 정보를 확인합니다", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "401", description = "로그인하지 않은 유저가 요청했습니다", content = @Content(mediaType = "application/json")),
+    })
     public ResponseEntity<OrderDetailResponse> findOrder(
             @AuthenticationPrincipal CustomOAuth2User user,
             @PathVariable("id") Long id
@@ -48,6 +62,11 @@ public class OrderController {
     }
 
     @GetMapping
+    @Operation(summary = "모든 주문 정보 확인", description = "유저의 모든 주문 정보를 확인합니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "모든 주문 확인 완료", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "401", description = "로그인하지 않은 유저가 요청했습니다", content = @Content(mediaType = "application/json")),
+    })
     public ResponseEntity<List<OrderResponse>> findOrders(
             @AuthenticationPrincipal CustomOAuth2User user
     ){
@@ -55,6 +74,11 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "주문 취소", description = "주문을 취소합니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "주문 취소 완료", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "401", description = "로그인하지 않은 유저가 요청했습니다", content = @Content(mediaType = "application/json")),
+    })
     public ResponseEntity<Void> cancelOrder(
             @AuthenticationPrincipal CustomOAuth2User user,
             @PathVariable("id") Long id
