@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.ollsy.category.dto.request.CategoryRequest;
 import kr.ollsy.category.dto.response.CategoryResponse;
@@ -19,6 +20,7 @@ import kr.ollsy.category.dto.response.CategoryTreeResponse;
 import kr.ollsy.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Category")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/category")

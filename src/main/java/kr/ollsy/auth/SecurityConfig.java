@@ -54,7 +54,7 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // X-Frames-Options 비활성화 -> h2 데이터베이스 콘솔 사용 가능
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/test","/h2-console/**","/swagger-ui/**").permitAll()
+                                .requestMatchers("/test","/h2-console/**","/swagger-ui/**","/swagger-ui.html","/v3/api-docs/**","/**").permitAll()
                                 .requestMatchers(HttpMethod.GET,"/api/v1/item/**").permitAll()
                                 .requestMatchers(HttpMethod.POST,"/api/v1/category/**","/api/v1/item/**","/api/v1/itemImage/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PATCH,"/api/v1/item/**").hasRole("ADMIN")

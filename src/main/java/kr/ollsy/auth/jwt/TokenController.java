@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.ollsy.auth.jwt.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Token")
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor

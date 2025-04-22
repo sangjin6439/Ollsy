@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.ollsy.auth.jwt.dto.CustomOAuth2User;
 import kr.ollsy.order.dto.request.OrderRequest;
@@ -21,6 +22,7 @@ import kr.ollsy.order.dto.response.OrderResponse;
 import kr.ollsy.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Order")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/order")

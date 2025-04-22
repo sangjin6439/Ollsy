@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.ollsy.item.dto.request.ItemRequest;
 import kr.ollsy.item.dto.response.ItemListResponse;
@@ -22,6 +23,7 @@ import kr.ollsy.item.dto.response.ItemResponse;
 import kr.ollsy.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Item")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/item")
