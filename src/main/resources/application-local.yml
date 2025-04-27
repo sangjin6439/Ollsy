@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 
-  h2:
-    console:
-      enabled: false
-      path: /h2-console
+#  h2:
+#    console:
+#      enabled: false
+#      path: /h2-console

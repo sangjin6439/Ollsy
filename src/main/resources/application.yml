@@ -4,7 +4,7 @@ server:
 spring:
   sql:
     init:
-      mode: never
+      mode: always
   profiles:
     active: local
   servlet:
@@ -30,7 +30,7 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: create
-#    defer-datasource-initialization: true
+    defer-datasource-initialization: true
 
   security:
     oauth2:
