@@ -68,7 +68,14 @@ public class SecurityConfig {
                                 .failureHandler(oAuthLoginFailureHandler) // 로그인 실패 시 핸들러
                 )
                 .addFilterBefore(new JwtFilter(jwtUtil, userRepository), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(eh-> eh.accessDeniedHandler(new CustomAccessDeniedHandler()));
+                .exceptionHandling(eh-> eh.accessDeniedHandler(new CustomAccessDeniedHandler()))
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .permitAll()
+                )
+                .oauth2Login(oauth -> oauth
+                        .loginPage("/login")
+                );;
         return httpSecurity.build();
     }
 }
