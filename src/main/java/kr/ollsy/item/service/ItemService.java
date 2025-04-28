@@ -109,6 +109,13 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
+    public List<ItemListResponse> findItemsByCreated() {
+        List<Item> itemList = itemRepository.findAllOrderByCreateAtDesc();
+        List<ItemListResponse> itemListResponses = createItemListResponse(itemList);
+        return itemListResponses;
+    }
+
+    @Transactional(readOnly = true)
     public List<ItemListResponse> findItemsByCategory(Long id, boolean includeSub) {
         List<Item> itemList;
 

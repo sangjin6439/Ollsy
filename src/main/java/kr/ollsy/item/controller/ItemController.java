@@ -71,6 +71,16 @@ public class ItemController {
         return ResponseEntity.ok(itemService.findItems());
     }
 
+    @GetMapping("/new")
+    @Operation(summary = "신상품 순으로 조회", description = "신상품 순으로 아이템을 조회합니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "신상품 순으로 아이템 조회 완료", content = {@Content(mediaType = "application/json")}),
+    })
+    public ResponseEntity<List<ItemListResponse>> findItemsByCreated(
+    ) {
+        return ResponseEntity.ok(itemService.findItemsByCreated());
+    }
+
     @GetMapping("/category/{id}")
     @Operation(summary = "카테고리 별 아이템 조회", description = "카테고리 별 아이템을 조회합니다. URL의 쿼리 파라미터로 includeSub=true을 붙이면 하위 카테고리까지 조회되고, 기본은 false입니다.")
     @ApiResponses(value = {
