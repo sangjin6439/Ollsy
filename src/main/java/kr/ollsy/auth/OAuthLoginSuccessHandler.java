@@ -9,6 +9,8 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Optional;
 
@@ -129,16 +131,12 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         String accessToken = jwtUtil.generateAccessToken(user.getId(), accessTokenExpirationTime);
 
         //유저 정보 및 토큰을 담아 리다이렉트
-        LoginResponse loginResponse = LoginResponse.of(
-                name,
-                user.getId(),
-                email,
-                accessToken,
-                refreshToken
-        );
-        //url이 아닌 json으로 access token, refresh token을 전달
-        response.setContentType("application/json");
-        response.getWriter().write(new ObjectMapper().writeValueAsString(loginResponse));
-        response.getWriter().flush();
+        String redirectUrl = "/oauth2-redirect.html" +
+                "?accessToken=" + accessToken +
+                "&refreshToken=" + refreshToken +
+                "&userId=" + user.getId() +
+                "&userName=" + URLEncoder.encode(name, StandardCharsets.UTF_8) +
+                "&email=" + URLEncoder.encode(email, StandardCharsets.UTF_8);
+        response.sendRedirect(redirectUrl);
     }
 }
