@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ollsy - 쇼핑몰</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="left-section">
+            <h1 class="logo"><a href="/">Ollsy</a></h1>
+        </div>
+        <div class="right-section">
+            <a href="/login" class="header-link" id="login-link">로그인</a>
+            <a href="/cart" class="header-link">장바구니</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="products-header">
+        <div class="sort-dropdown">
+            <button class="dropdown-btn">신상품 순</button>
+        </div>
+    </div>
+
+    <div class="products-container" id="items-container">
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 Ollsy. All rights reserved.</p>
+</footer>
+
+<script src="/js/main.js"></script>
+</body>
+</html>
