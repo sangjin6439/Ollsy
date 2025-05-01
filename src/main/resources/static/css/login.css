@@ -1,0 +1,59 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+    font-family: 'Noto Sans KR', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    background-color: #fff;
+    padding: 60px 50px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 400px; /* 👉 폭 키움 */
+}
+
+.login-container h1 {
+    margin-bottom: 40px;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.social-login-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.social-btn {
+    display: block;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.social-btn.naver {
+    background-color: #03C75A;
+}
+
+.social-btn.kakao {
+    background-color: #FEE500;
+    color: #3C1E1E;
+}
+
+.social-btn.google {
+    background-color: #4285F4;
+}
+
+.social-btn:hover {
+    opacity: 0.9;
+}
