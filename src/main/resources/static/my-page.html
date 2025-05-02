@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>내 정보 - Ollsy</title>
+    <link rel="stylesheet" href="/css/my-page.css">
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <h1><a href="/">Ollsy</a></h1>
+        <div class="header-actions">
+            <a href="/logout" id="logout-btn">로그아웃</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="mypage-container">
+        <h2>내 정보</h2>
+        <div class="user-info">
+            <p><strong>이름:</strong> <span id="user-name"></span></p>
+            <p><strong>닉네임:</strong> <span id="user-nickname"></span></p>
+            <p><strong>이메일:</strong> <span id="user-email"></span></p>
+        </div>
+
+        <div class="nickname-update">
+            <label for="nickname-input"><strong>닉네임 변경:</strong></label>
+            <input type="text" id="nickname-input" placeholder="2~8자 입력">
+            <button id="nickname-update-btn">변경</button>
+        </div>
+
+        <div class="actions">
+            <a href="/order-list.html" class="btn">주문 내역 보기</a>
+            <a href="/cart" class="btn">장바구니</a>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 Ollsy. All rights reserved.</p>
+</footer>
+
+<script src="/js/my-page.js"></script>
+</body>
+</html>

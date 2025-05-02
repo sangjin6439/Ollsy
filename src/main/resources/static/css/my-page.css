@@ -1,0 +1,58 @@
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.mypage-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.user-info p {
+    margin: 10px 0;
+}
+
+.nickname-update {
+    margin-top: 20px;
+}
+
+.nickname-update input {
+    padding: 6px;
+    margin-left: 10px;
+    width: 150px;
+}
+
+.nickname-update button {
+    margin-left: 10px;
+    padding: 6px 12px;
+}
+
+.actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 10px;
+}
+
+.actions .btn {
+    background: black;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+}
