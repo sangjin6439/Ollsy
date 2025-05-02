@@ -9,7 +9,6 @@ body {
     background-color: #f9f9f9;
 }
 
-/* 헤더 */
 .header-container {
     display: flex;
     justify-content: space-between;
@@ -98,7 +97,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* 버튼 */
 .action-buttons {
     display: flex;
     justify-content: center;
@@ -134,7 +132,6 @@ body {
     background-color: #ddd;
 }
 
-/* 로딩 */
 .loading {
     width: 100%;
     text-align: center;
@@ -143,7 +140,6 @@ body {
     color: #999;
 }
 
-/* 푸터 */
 footer {
     text-align: center;
     padding: 20px;

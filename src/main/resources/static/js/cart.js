@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 🟨 주문하기 버튼 클릭
+    //주문하기 버튼 클릭
     orderBtn.addEventListener('click', function () {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
 

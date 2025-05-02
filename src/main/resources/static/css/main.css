@@ -35,7 +35,6 @@ body {
     font-size: 16px;
 }
 
-/* ✅ 상품 위 신상품 드롭다운 위치 */
 .products-header {
     display: flex;
     justify-content: flex-end;

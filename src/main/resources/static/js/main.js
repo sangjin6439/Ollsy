@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const container = document.getElementById('items-container');
     const loginLink = document.getElementById('login-link');
 
-    // 🔐 로그인 상태 확인
+    //로그인 상태 확인
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
         fetch('/api/v1/user', {
@@ -26,12 +26,12 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // 🔻 신상품 드롭다운
+    //신상품 드롭다운
     dropdownBtn.addEventListener('click', function () {
         console.log('신상품 메뉴 클릭됨');
     });
 
-    // 🛍️ 상품 목록 불러오기
+    //상품 목록 불러오기
     fetch('/api/v1/item/new')
         .then(response => response.json())
         .then(items => {
