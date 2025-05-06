@@ -1,4 +1,4 @@
-package kr.ollsy.auth;
+package kr.ollsy.auth.loginHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

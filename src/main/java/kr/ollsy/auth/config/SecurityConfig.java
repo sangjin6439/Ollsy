@@ -1,6 +1,4 @@
-package kr.ollsy.auth;
-
-import com.nimbusds.oauth2.sdk.auth.JWTAuthentication;
+package kr.ollsy.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -20,6 +16,8 @@ import java.util.Collections;
 
 import kr.ollsy.auth.jwt.JwtFilter;
 import kr.ollsy.auth.jwt.JwtUtil;
+import kr.ollsy.auth.loginHandler.OAuthLoginFailureHandler;
+import kr.ollsy.auth.loginHandler.OAuthLoginSuccessHandler;
 import kr.ollsy.global.exception.CustomAccessDeniedHandler;
 import kr.ollsy.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
