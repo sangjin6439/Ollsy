@@ -9,9 +9,7 @@ import java.util.List;
 import kr.ollsy.item.domain.Item;
 
 @Repository
-public interface ItemRepository extends JpaRepository<Item,Long> {
+public interface ItemRepository extends JpaRepository<Item,Long>, ItemRepositoryCustom {
     List<Item> findItemsByCategoryId(Long id);
     List<Item> findAllByCategoryIdIn(List<Long> categoryIdList);
-    @Query("select i from Item i order by i.createAt DESC ")
-    List<Item> findAllOrderByCreateAtDesc();
 }
