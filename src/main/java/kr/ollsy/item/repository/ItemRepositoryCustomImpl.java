@@ -6,6 +6,10 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,16 +24,25 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Item> findAllOrderByCreateAtDesc() {
-        return jpaQueryFactory
+    public Page<Item> findAllOrderByCreateAtDesc(Pageable pageable) {
+        List<Item> itemList = jpaQueryFactory
                 .selectFrom(item)
                 .orderBy(item.createAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        long total = jpaQueryFactory
+                .select(item.count())
+                .from(item)
+                .fetchOne();
+
+        return new PageImpl<>(itemList, pageable, total);
     }
 
     @Override
-    public List<Item> searchItems(String name, Long categoryId, Integer maxPrice, Integer minPrice) {
-        return jpaQueryFactory
+    public Page<Item> searchItems(String name, Long categoryId, Integer maxPrice, Integer minPrice, Pageable pageable) {
+        List<Item> itemList = jpaQueryFactory
                 .selectFrom(item)
                 .where(
                         nameContains(name),
@@ -37,7 +50,17 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                         priceLoe(maxPrice),
                         priceGoe(minPrice)
                 )
+                .orderBy(item.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        long total = jpaQueryFactory
+                .select(item.count())
+                .from(item)
+                .fetchOne();
+
+        return new PageImpl<>(itemList, pageable, total);
     }
 
     private BooleanExpression nameContains(String name) {

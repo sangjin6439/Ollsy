@@ -1,6 +1,11 @@
 package kr.ollsy.item.controller;
 
 
+import org.springdoc.core.converters.models.PageableAsQueryParam;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +22,7 @@ import java.net.URI;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -68,9 +74,13 @@ public class ItemController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "모든 아이템 조회 완료", content = {@Content(mediaType = "application/json")}),
     })
-    public ResponseEntity<List<ItemListResponse>> findItems(
-    ) {
-        return ResponseEntity.ok(itemService.findItems());
+    @PageableAsQueryParam
+    public ResponseEntity<Page<ItemListResponse>> findItems(
+            @Parameter(hidden = true)
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable
+            ){
+        return ResponseEntity.ok(itemService.findItems(pageable));
     }
 
     @GetMapping("/new")
@@ -78,9 +88,13 @@ public class ItemController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "신상품 순으로 아이템 조회 완료", content = {@Content(mediaType = "application/json")}),
     })
-    public ResponseEntity<List<ItemListResponse>> findItemsByCreated(
+    @PageableAsQueryParam
+    public ResponseEntity<Page<ItemListResponse>> findItemsByCreated(
+            @Parameter(hidden = true)
+            @PageableDefault(size = 10, sort = "createAt", direction = Sort.Direction.DESC)
+            Pageable pageable
     ) {
-        return ResponseEntity.ok(itemService.findItemsByCreated());
+        return ResponseEntity.ok(itemService.findItemsByCreated(pageable));
     }
 
     @GetMapping("/category/{id}")
@@ -89,12 +103,16 @@ public class ItemController {
             @ApiResponse(responseCode = "200", description = "카테고리 별 아이템을 조회 완료", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404", description = "카테고리를 찾을 수 없습니다", content = @Content(mediaType = "application/json")),
     })
-    public ResponseEntity<List<ItemListResponse>> findItemsByCategory(
+    @PageableAsQueryParam
+    public ResponseEntity<Page<ItemListResponse>> findItemsByCategory(
+            @Parameter(hidden = true)
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable,
             @PathVariable("id") Long id,
             @RequestParam(value = "includeSub", required = false, defaultValue = "false") boolean includeSub
 
     ) {
-        return ResponseEntity.ok(itemService.findItemsByCategory(id, includeSub));
+        return ResponseEntity.ok(itemService.findItemsByCategory(id, includeSub, pageable));
     }
 
     @GetMapping("/search")
@@ -103,10 +121,14 @@ public class ItemController {
             @ApiResponse(responseCode = "200", description = "여러 조건에 따른 아이템을 조회 완료", content = {@Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404", description = "검색 조건을 확인해 주세요", content = @Content(mediaType = "application/json")),
     })
-    public ResponseEntity<List<ItemListResponse>> searchItems(
+    @PageableAsQueryParam
+    public ResponseEntity<Page<ItemListResponse>> searchItems(
+            @Parameter(hidden = true)
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable,
             @RequestBody ItemSearchRequest itemSearchRequest
             ){
-        return ResponseEntity.ok(itemService.searchItems(itemSearchRequest));
+        return ResponseEntity.ok(itemService.searchItems(itemSearchRequest, pageable));
     }
 
     @PatchMapping("/{id}")

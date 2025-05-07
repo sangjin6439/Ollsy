@@ -1,5 +1,7 @@
 package kr.ollsy.item.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,12 +91,24 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public List<ItemListResponse> findItems() {
-        List<Item> itemList = itemRepository.findAll();
-        List<ItemListResponse> itemListResponses = createItemListResponse(itemList);
-        return itemListResponses;
+    public Page<ItemListResponse> findItems(Pageable pageable) {
+        Page<Item> itemPage = itemRepository.findAll(pageable);
+        return itemPage.map(this::toItemListResponse);
+    }
+    //페이징 시 사용하는 메서드
+    private ItemListResponse toItemListResponse(Item item){
+        return ItemListResponse.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .price(item.getPrice())
+                .stock(item.getStock())
+                .categoryName(item.getCategory().getName())
+                .itemImageUrl(getUrlList(item.getImages()))
+                .build();
     }
 
+    //페이징 안 하는 메서드에 사용
     private List<ItemListResponse> createItemListResponse(List<Item> itemList) {
         return itemList.stream()
                 .map(item -> ItemListResponse.builder()
@@ -110,26 +124,22 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public List<ItemListResponse> findItemsByCreated() {
-        List<Item> itemList = itemRepository.findAllOrderByCreateAtDesc();
-        List<ItemListResponse> itemListResponses = createItemListResponse(itemList);
-        return itemListResponses;
+    public Page<ItemListResponse> findItemsByCreated(Pageable pageable) {
+        Page<Item> itemPage = itemRepository.findAllOrderByCreateAtDesc(pageable);
+        return itemPage.map(this::toItemListResponse);
     }
 
     @Transactional(readOnly = true)
-    public List<ItemListResponse> findItemsByCategory(Long id, boolean includeSub) {
-        List<Item> itemList;
-
+    public Page<ItemListResponse> findItemsByCategory(Long id, boolean includeSub, Pageable pageable) {
+        Page<Item> itemPage;
         if (includeSub) {
             Category category = findCategory(id);
             List<Long> categoryIdList = getAllCategoryIdList(category);
-            itemList = itemRepository.findAllByCategoryIdIn(categoryIdList);
+            itemPage = itemRepository.findAllByCategoryIdIn(categoryIdList, pageable);
         } else {
-            itemList = itemRepository.findItemsByCategoryId(id);
+            itemPage = itemRepository.findItemsByCategoryId(id, pageable);
         }
-
-        List<ItemListResponse> itemListResponseList = createItemListResponse(itemList);
-        return itemListResponseList;
+        return itemPage.map(this::toItemListResponse);
     }
 
     private List<Long> getAllCategoryIdList(Category category) {
@@ -145,16 +155,16 @@ public class ItemService {
         }
     }
 
-
-    @Transactional
-    public List<ItemListResponse> searchItems(ItemSearchRequest itemSearchRequest) {
-        List<Item> itemList = itemRepository.searchItems(
+    @Transactional(readOnly = true)
+    public Page<ItemListResponse> searchItems(ItemSearchRequest itemSearchRequest, Pageable pageable) {
+        Page<Item> itemPage = itemRepository.searchItems(
                 itemSearchRequest.getName(),
                 itemSearchRequest.getCategoryId(),
                 itemSearchRequest.getMaxPrice(),
-                itemSearchRequest.getMinPrice());
-        List<ItemListResponse> itemListResponses = createItemListResponse(itemList);
-        return itemListResponses;
+                itemSearchRequest.getMinPrice(),
+                pageable
+        );
+        return itemPage.map(this::toItemListResponse);
     }
 
     @Transactional

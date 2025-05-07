@@ -1,13 +1,17 @@
 package kr.ollsy.item.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 import javax.swing.ListModel;
 
 import kr.ollsy.item.domain.Item;
+import kr.ollsy.item.dto.response.ItemListResponse;
 
 public interface ItemRepositoryCustom {
-    List<Item> findAllOrderByCreateAtDesc();
+    Page<Item> findAllOrderByCreateAtDesc(Pageable pageable);
 
-    List<Item> searchItems(String name, Long categoryId,Integer maxPrice, Integer minPrice);
+    Page<Item> searchItems(String name, Long categoryId, Integer maxPrice, Integer minPrice, Pageable pageable);
 }
