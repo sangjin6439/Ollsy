@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -22,6 +23,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.ollsy.item.dto.request.ItemRequest;
+import kr.ollsy.item.dto.request.ItemSearchRequest;
 import kr.ollsy.item.dto.response.ItemListResponse;
 import kr.ollsy.item.dto.response.ItemResponse;
 import kr.ollsy.item.service.ItemService;
@@ -93,6 +95,18 @@ public class ItemController {
 
     ) {
         return ResponseEntity.ok(itemService.findItemsByCategory(id, includeSub));
+    }
+
+    @GetMapping("/search")
+    @Operation(summary = "여러 조건에 따른 아이템 조회", description = "제품에 포함되는 이름, 카테고리 별, 최소 최대 가격으로 아이템 조회.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "여러 조건에 따른 아이템을 조회 완료", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "404", description = "검색 조건을 확인해 주세요", content = @Content(mediaType = "application/json")),
+    })
+    public ResponseEntity<List<ItemListResponse>> searchItems(
+            @RequestBody ItemSearchRequest itemSearchRequest
+            ){
+        return ResponseEntity.ok(itemService.searchItems(itemSearchRequest));
     }
 
     @PatchMapping("/{id}")

@@ -13,6 +13,7 @@ import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.global.exception.GlobalExceptionCode;
 import kr.ollsy.item.domain.Item;
 import kr.ollsy.item.dto.request.ItemRequest;
+import kr.ollsy.item.dto.request.ItemSearchRequest;
 import kr.ollsy.item.dto.response.ItemListResponse;
 import kr.ollsy.item.dto.response.ItemResponse;
 import kr.ollsy.item.repository.ItemRepository;
@@ -142,6 +143,18 @@ public class ItemService {
         for (Category child : category.getChildren()) {
             collectCategoryIdList(child, idList);
         }
+    }
+
+
+    @Transactional
+    public List<ItemListResponse> searchItems(ItemSearchRequest itemSearchRequest) {
+        List<Item> itemList = itemRepository.searchItems(
+                itemSearchRequest.getName(),
+                itemSearchRequest.getCategoryId(),
+                itemSearchRequest.getMaxPrice(),
+                itemSearchRequest.getMinPrice());
+        List<ItemListResponse> itemListResponses = createItemListResponse(itemList);
+        return itemListResponses;
     }
 
     @Transactional
