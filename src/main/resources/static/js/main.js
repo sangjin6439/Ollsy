@@ -32,21 +32,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     //상품 목록 불러오기
-    fetch('/api/v1/item/new')
+    fetch('/api/v1/item/new?page=0&size=3')
         .then(response => response.json())
-        .then(items => {
-            items.slice(0, 3).forEach(item => {
+        .then(page => {
+            const items = page.content;
+            items.forEach(item => {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'product-card';
                 itemDiv.innerHTML = `
-                    <div class="product-image">
-                        <img src="${item.itemImageUrl}" alt="${item.name}">
-                    </div>
-                    <div class="product-info">
-                        <h3>${item.name}</h3>
-                        <p>${item.price.toLocaleString()}원</p>
-                    </div>
-                `;
+                <div class="product-image">
+                    <img src="${item.itemImageUrl}" alt="${item.name}">
+                </div>
+                <div class="product-info">
+                    <h3>${item.name}</h3>
+                    <p>${item.price.toLocaleString()}원</p>
+                </div>
+            `;
                 itemDiv.addEventListener('click', () => {
                     window.location.href = `/item-detail.html?id=${item.id}`;
                 });

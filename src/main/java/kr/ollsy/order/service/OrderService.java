@@ -1,5 +1,7 @@
 package kr.ollsy.order.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,19 +97,18 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<OrderResponse> findOrders(String providerId) {
-        User user = userRepository.findByProviderId(providerId);
+    public Page<OrderResponse> findOrders(String providerId, Pageable pageable) {
+        Page<Order> orderPage = orderRepository.findByUserProviderId(providerId,pageable);
+        return orderPage.map(this::toOderResponse);
+    }
 
-        List<Order> orders = user.getOrders();
-
-        return orders.stream()
-                .map(o -> OrderResponse.builder()
-                        .id(o.getId())
-                        .orderItemResponseList(orderItemListToDto(o.getOrderItems()))
-                        .totalPrice(o.getTotalPrice())
-                        .orderAt(o.getCreateAt())
-                        .build())
-                .collect(Collectors.toList());
+    private OrderResponse toOderResponse(Order order){
+        return OrderResponse.builder()
+                .id(order.getId())
+                .orderItemResponseList(orderItemListToDto(order.getOrderItems()))
+                .totalPrice(order.getTotalPrice())
+                .orderAt(order.getCreateAt())
+                .build();
     }
 
     @Transactional

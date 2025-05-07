@@ -1,10 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('order-list');
 
-    fetch('/api/v1/order')
+    const page = 0;
+    const size = 3;
+
+    fetch(`/api/v1/order?page=${page}&size=${size}`)
         .then(res => res.json())
-        .then(orders => {
-            if (orders.length === 0) {
+        .then(result => {
+            const orders = result.content;
+
+            if (!orders || orders.length === 0) {
                 container.innerHTML = '<p>주문 내역이 없습니다.</p>';
                 return;
             }
@@ -20,6 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 container.appendChild(div);
             });
+
+            // ✅ 필요하면 페이지 정보도 출력 가능
+            console.log(`현재 페이지: ${result.number + 1} / 총 페이지: ${result.totalPages}`);
         })
         .catch(err => {
             console.error('주문 목록 가져오기 실패:', err);
