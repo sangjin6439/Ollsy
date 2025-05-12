@@ -2,3 +2,11 @@ spring:
   config:
     active:
       on-profile: prod
+
+  sql:
+    init:
+      mode: never
+
+  jpa:
+    hibernate:
+      ddl-auto: none

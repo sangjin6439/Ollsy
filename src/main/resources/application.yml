@@ -2,9 +2,6 @@ server:
   port: 8080
 
 spring:
-  sql:
-    init:
-      mode: always
   profiles:
     active: local
   servlet:
@@ -28,8 +25,6 @@ spring:
         use_sql_comments: true
         highlight_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
-    hibernate:
-      ddl-auto: create
     defer-datasource-initialization: true
 
   security:
