@@ -5,9 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-public class OrderItemRequest {
-    private Long itemId;
-    private int quantity;
+public record OrderItemRequest(
+        Long itemId,
+        int quantity
+) {
 }

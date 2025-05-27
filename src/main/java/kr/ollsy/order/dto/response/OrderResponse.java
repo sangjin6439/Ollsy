@@ -11,13 +11,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Builder
-public class OrderResponse {
-    private Long id;
-    private List<OrderItemResponse> orderItemResponseList = new ArrayList<>();
-    private int totalPrice;
-    private LocalDateTime orderAt;
+public record OrderResponse(
+        Long id,
+        List<OrderItemResponse> orderItemResponseList,
+        int totalPrice,
+        LocalDateTime orderAt
+) {
 }

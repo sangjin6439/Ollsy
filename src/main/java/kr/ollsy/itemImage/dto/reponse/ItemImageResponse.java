@@ -5,11 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class ItemImageResponse {
-    private Long id;
-    private String url;
+public record ItemImageResponse(
+        Long id,
+        String url
+) {
 }

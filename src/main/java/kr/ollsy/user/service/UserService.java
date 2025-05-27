@@ -22,9 +22,9 @@ public class UserService {
     @Transactional
     public String userNicknameUpdate(Long id, UserNicknameUpdateRequest userNicknameUpdateRequest) {
 
-        validNickname(userNicknameUpdateRequest.getNickname());
+        validNickname(userNicknameUpdateRequest.nickname());
         User user = findUserById(id);
-        user.updateNickname(userNicknameUpdateRequest.getNickname());
+        user.updateNickname(userNicknameUpdateRequest.nickname());
 
         return "닉네임이 변경되었습니다.";
     }

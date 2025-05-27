@@ -5,11 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-public class ItemSearchRequest {
-    private String name;
-    private Long categoryId;
-    private int minPrice;
-    private int maxPrice;
+public record ItemSearchRequest(
+        String name,
+        Long categoryId,
+        int minPrice,
+        int maxPrice
+) {
 }

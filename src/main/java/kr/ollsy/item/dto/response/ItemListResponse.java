@@ -8,15 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Builder
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ItemListResponse {
-    private Long id;
-    private String name;
-    private String description;
-    private int price;
-    private int stock;
-    private String categoryName;
-    private List<String> itemImageUrl;
+public record ItemListResponse(
+        Long id,
+        String name,
+        String description,
+        int price,
+        int stock,
+        String categoryName,
+        List<String> itemImageUrl
+) {
 }

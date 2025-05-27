@@ -14,24 +14,22 @@ import kr.ollsy.item.domain.Item;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-public class ItemRequest {
+public record ItemRequest(
+        @NotNull
+        @Length(min = 2, max = 20)
+        String name,
 
-    @NotNull
-    @Length(min = 2, max = 20)
-    private String name;
+        @NotNull
+        String description,
 
-    @NotNull
-    private String description;
+        int price,
 
-    private int price;
+        int stock,
 
-    private int stock;
+        Long categoryId,
 
-    private Long categoryId;
-
-    @NotNull
-    @Size(min = 1, message = "최소 하나의 이미지 ID가 필요합니다.")
-    private List<Long> itemImageId = new ArrayList<>();
+        @NotNull
+        @Size(min = 1, message = "최소 하나의 이미지 ID가 필요합니다.")
+        List<Long> itemImageId
+) {
 }

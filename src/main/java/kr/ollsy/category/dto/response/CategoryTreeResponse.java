@@ -10,17 +10,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
+
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class CategoryTreeResponse {
-
-    private Long id;
-    private String name;
-    private int depth;
-    private List<CategoryTreeResponse> children;
-
+public record CategoryTreeResponse(
+        Long id,
+        String name,
+        int depth,
+        List<CategoryTreeResponse> children
+) {
     public static CategoryTreeResponse of(Category category) {
         return CategoryTreeResponse.builder()
                 .id(category.getId())

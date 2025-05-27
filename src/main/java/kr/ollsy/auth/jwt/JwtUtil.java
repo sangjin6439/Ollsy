@@ -64,7 +64,6 @@ public class JwtUtil {
                     .parseSignedClaims(token)
                     .getPayload()
                     .get("userId", String.class);
-            log.info("유저 id를 반환합니다.");
             return userId;
         } catch (JwtException | IllegalArgumentException e) {
             // 토큰이 유효하지 않은 경우
@@ -82,7 +81,6 @@ public class JwtUtil {
                     .parseSignedClaims(token)
                     .getPayload()
                     .getExpiration();
-            log.info("토큰의 유효기간을 확인합니다.");
             return expirationDate.before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
             // 토큰이 유효하지 않은 경우

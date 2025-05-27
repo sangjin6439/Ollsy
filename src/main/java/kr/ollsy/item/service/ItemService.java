@@ -35,14 +35,14 @@ public class ItemService {
 
     @Transactional
     public ItemResponse createItem(ItemRequest itemRequest) {
-        validCategoryIdIsNull(itemRequest.getCategoryId());
-        Category category = findCategory(itemRequest.getCategoryId());
-        List<ItemImage> itemImageList = getUploadImages(itemRequest.getItemImageId());
+        validCategoryIdIsNull(itemRequest.categoryId());
+        Category category = findCategory(itemRequest.categoryId());
+        List<ItemImage> itemImageList = getUploadImages(itemRequest.itemImageId());
         Item item = Item.builder()
-                .name(itemRequest.getName())
-                .description(itemRequest.getDescription())
-                .price(itemRequest.getPrice())
-                .stock(itemRequest.getStock())
+                .name(itemRequest.name())
+                .description(itemRequest.description())
+                .price(itemRequest.price())
+                .stock(itemRequest.stock())
                 .category(category)
                 .images(itemImageList)
                 .build();
@@ -158,10 +158,10 @@ public class ItemService {
     @Transactional(readOnly = true)
     public Page<ItemListResponse> searchItems(ItemSearchRequest itemSearchRequest, Pageable pageable) {
         Page<Item> itemPage = itemRepository.searchItems(
-                itemSearchRequest.getName(),
-                itemSearchRequest.getCategoryId(),
-                itemSearchRequest.getMaxPrice(),
-                itemSearchRequest.getMinPrice(),
+                itemSearchRequest.name(),
+                itemSearchRequest.categoryId(),
+                itemSearchRequest.maxPrice(),
+                itemSearchRequest.minPrice(),
                 pageable
         );
         return itemPage.map(this::toItemListResponse);
@@ -170,13 +170,13 @@ public class ItemService {
     @Transactional
     public ItemResponse updateItem(Long id, ItemRequest itemRequest) {
         Item item = findItemById(id);
-        validCategoryIdIsNull(itemRequest.getCategoryId());
+        validCategoryIdIsNull(itemRequest.categoryId());
 
-        Category category = findCategory(itemRequest.getCategoryId());
-        List<ItemImage> newImageList = getUploadImages(itemRequest.getItemImageId());
+        Category category = findCategory(itemRequest.categoryId());
+        List<ItemImage> newImageList = getUploadImages(itemRequest.itemImageId());
         List<ItemImage> oldImageList = new ArrayList<>(item.getImages());
 
-        item.updateItem(itemRequest.getName(), itemRequest.getDescription(), itemRequest.getPrice(), itemRequest.getStock(), category, newImageList);
+        item.updateItem(itemRequest.name(), itemRequest.description(), itemRequest.price(), itemRequest.stock(), category, newImageList);
 
         List<ItemImage> imagesToDelete = getImagesToDelete(oldImageList,newImageList);
 

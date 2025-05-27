@@ -53,7 +53,7 @@ public class ItemController {
             @RequestBody @Valid ItemRequest itemRequest
     ) {
         ItemResponse itemResponse = itemService.createItem(itemRequest);
-        return ResponseEntity.created(URI.create("api/v1/item/" + itemResponse.getId()
+        return ResponseEntity.created(URI.create("api/v1/item/" + itemResponse.id()
         )).body(itemResponse);
     }
 

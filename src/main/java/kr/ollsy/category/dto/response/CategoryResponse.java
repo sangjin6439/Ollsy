@@ -10,21 +10,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class CategoryResponse {
-
-    private Long id;
-    private String name;
-    private int depth;
-
+public record CategoryResponse(
+        Long id,
+        String name,
+        int depth
+) {
     public static CategoryResponse of(Category category) {
-        return CategoryResponse.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .depth(category.getDepth())
-                .build();
+        return new CategoryResponse(
+                category.getId(),
+                category.getName(),
+                category.getDepth()
+        );
     }
 }

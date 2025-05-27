@@ -35,13 +35,13 @@ public class OrderService {
     public OrderResponse createOrder(String providerId, OrderRequest orderRequest) {
 
         User user = userRepository.findByProviderId(providerId);
-        List<OrderItem> orderItemList = orderRequest.getOrderItemList().stream()
+        List<OrderItem> orderItemList = orderRequest.orderItemList().stream()
                 .map(orderItemRequest -> {
-                    Item item = itemRepository.findById(orderItemRequest.getItemId())
+                    Item item = itemRepository.findById(orderItemRequest.itemId())
                             .orElseThrow(() -> new CustomException(GlobalExceptionCode.ITEM_NOT_FOUND));
-                    item.validateQuantity(orderItemRequest.getQuantity());
-                    item.removeStock(orderItemRequest.getQuantity());
-                    return OrderItem.of(item, orderItemRequest.getQuantity());
+                    item.validateQuantity(orderItemRequest.quantity());
+                    item.removeStock(orderItemRequest.quantity());
+                    return OrderItem.of(item, orderItemRequest.quantity());
                 })
                 .collect(Collectors.toList());
 

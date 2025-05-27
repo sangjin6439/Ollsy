@@ -25,9 +25,9 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse createCategory(CategoryRequest categoryRequest) {
-        Category parent = findParent(categoryRequest.getParentId());
+        Category parent = findParent(categoryRequest.parentId());
         int depth = calculateDepth(parent);
-        Category category = saveCategory(categoryRequest.getName(), depth, parent);
+        Category category = saveCategory(categoryRequest.name(), depth, parent);
 
         if(parent!=null){
             parent.addChild(category);

@@ -42,7 +42,7 @@ public class CategoryController {
             @RequestBody @Valid CategoryRequest categoryRequest
     ) {
         CategoryResponse categoryResponse = categoryService.createCategory(categoryRequest);
-        return ResponseEntity.created(URI.create("/api/v1/categories/" + categoryResponse.getId())).body(categoryResponse);
+        return ResponseEntity.created(URI.create("/api/v1/categories/" + categoryResponse.id())).body(categoryResponse);
     }
 
     @GetMapping

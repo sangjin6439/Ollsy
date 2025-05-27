@@ -6,12 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class OrderItemResponse {
-    private String name;
-    private int price;
-    private int quantity;
+public record OrderItemResponse(
+        String name,
+        int price,
+        int quantity) {
 }

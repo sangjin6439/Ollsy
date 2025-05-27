@@ -21,4 +21,3 @@ UPDATE item_images SET item_item_id = 2 WHERE item_image_id = 2;
 UPDATE item_images SET item_item_id = 3 WHERE item_image_id = 3;
 UPDATE item_images SET item_item_id = 4 WHERE item_image_id = 4;
 UPDATE items SET create_at = NOW(), update_at = NOW();
-

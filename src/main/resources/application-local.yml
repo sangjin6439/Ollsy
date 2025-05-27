@@ -1,15 +1,15 @@
 spring:
   config:
-    active:
+    activate:
       on-profile: local
 
   sql:
     init:
-      mode: always
+      mode: never
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 
   datasource:
     url: jdbc:mysql://localhost:3306/ollsyDB

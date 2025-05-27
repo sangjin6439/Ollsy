@@ -51,7 +51,7 @@ public class OrderController {
             @RequestBody @Valid OrderRequest orderRequest
     ) {
         OrderResponse orderResponse = orderService.createOrder(user.getName(), orderRequest);
-        return ResponseEntity.created(URI.create("/api/v1/order/" + orderResponse.getId())).body(orderResponse);
+        return ResponseEntity.created(URI.create("/api/v1/order/" + orderResponse.id())).body(orderResponse);
     }
 
     @GetMapping("/{id}")
