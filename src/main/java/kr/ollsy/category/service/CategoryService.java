@@ -1,6 +1,5 @@
 package kr.ollsy.category.service;
 
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +13,6 @@ import kr.ollsy.category.dto.response.CategoryTreeResponse;
 import kr.ollsy.category.repository.CategoryRepository;
 import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.global.exception.GlobalExceptionCode;
-import kr.ollsy.global.exception.GlobalExceptionHandler;
 import lombok.RequiredArgsConstructor;
 
 @Service

@@ -1,8 +1,5 @@
 package kr.ollsy.global.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 public record ExceptionResponse(
         String errorCode,
         String errorMessage

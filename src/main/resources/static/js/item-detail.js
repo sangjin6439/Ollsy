@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="item-info">
                     <h2 class="item-name">${item.name}</h2>
                     <p class="item-description">${item.description}</p>
-                    <div class="item-price">${item.price.toLocaleString()}원</div>
-                    <div class="item-stock">${item.stock}개</div>
+                    <div class="item-price">가격: ${item.price.toLocaleString()}원</div>
+                    <div class="item-stock">재고: ${item.stock}개</div>
                 </div>
             `;
         })

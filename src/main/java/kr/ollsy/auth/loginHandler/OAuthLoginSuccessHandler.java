@@ -1,7 +1,5 @@
 package kr.ollsy.auth.loginHandler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -23,10 +21,8 @@ import kr.ollsy.auth.info.OAuth2UserInfo;
 import kr.ollsy.auth.jwt.JwtUtil;
 import kr.ollsy.auth.jwt.RefreshToken;
 import kr.ollsy.auth.jwt.RefreshTokenRepository;
-import kr.ollsy.auth.jwt.dto.LoginResponse;
 import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.global.exception.GlobalExceptionCode;
-import kr.ollsy.global.exception.GlobalExceptionHandler;
 import kr.ollsy.global.util.NicknameGenerator;
 import kr.ollsy.user.domain.Role;
 import kr.ollsy.user.domain.User;

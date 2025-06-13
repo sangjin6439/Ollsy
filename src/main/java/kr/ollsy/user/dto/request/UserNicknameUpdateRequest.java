@@ -2,10 +2,6 @@ package kr.ollsy.user.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 public record UserNicknameUpdateRequest(
         @NotNull(message = "닉네임을 입력해 주세요.")

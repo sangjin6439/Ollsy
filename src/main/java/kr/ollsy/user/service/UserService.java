@@ -3,8 +3,6 @@ package kr.ollsy.user.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.print.attribute.standard.RequestingUserName;
-
 import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.global.exception.GlobalExceptionCode;
 import kr.ollsy.user.domain.User;

@@ -49,6 +49,7 @@ public class Order extends DateEntity {
         this.user = user;
         user.getOrders().add(this);
     }
+
     //편의 메서드
     public void addOrderItem(OrderItem orderItem) {
         orderItem.setOrder(this);

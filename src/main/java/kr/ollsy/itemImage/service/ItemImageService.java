@@ -16,8 +16,8 @@ import java.util.UUID;
 
 import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.global.exception.GlobalExceptionCode;
-import kr.ollsy.itemImage.dto.reponse.ItemImageResponse;
 import kr.ollsy.itemImage.domain.ItemImage;
+import kr.ollsy.itemImage.dto.reponse.ItemImageResponse;
 import kr.ollsy.itemImage.repository.ItemImageRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -82,7 +82,7 @@ public class ItemImageService {
     @Transactional
     public void deleteItemImage(Long id) {
         ItemImage itemImage = itemImageRepository.findById(id)
-                .orElseThrow(()-> new CustomException(GlobalExceptionCode.ITEM_IMAGE_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(GlobalExceptionCode.ITEM_IMAGE_NOT_FOUND));
 
         String keyUrl = extractKeyFromUrl(itemImage.getUrl());
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, keyUrl));

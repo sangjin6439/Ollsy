@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @Table(name = "users")
-public class User extends DateEntity{
+public class User extends DateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,7 +62,7 @@ public class User extends DateEntity{
     }
 
     //편의 메서드
-    public void addOrder(Order order){
+    public void addOrder(Order order) {
         this.orders.add(order);
         order.setUser(this);
     }

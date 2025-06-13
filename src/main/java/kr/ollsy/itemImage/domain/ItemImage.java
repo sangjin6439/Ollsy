@@ -36,6 +36,6 @@ public class ItemImage extends DateEntity {
     private Item item;
 
     public void setItem(Item item) {
-        this.item=item;
+        this.item = item;
     }
 }

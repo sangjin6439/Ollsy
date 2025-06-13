@@ -40,18 +40,18 @@ public class OrderItem {
 
     private int quantity;
 
-    public static OrderItem of(Item item, int quantity){
-       return OrderItem.builder()
-               .item(item)
-               .quantity(quantity)
-               .build();
+    public static OrderItem of(Item item, int quantity) {
+        return OrderItem.builder()
+                .item(item)
+                .quantity(quantity)
+                .build();
     }
 
     public void setOrder(Order order) {
-        this.order=order;
+        this.order = order;
     }
 
-    public void addStock(int quantity){
+    public void addStock(int quantity) {
         getItem().addStock(quantity);
     }
 }

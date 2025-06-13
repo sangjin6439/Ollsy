@@ -11,13 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import kr.ollsy.auth.jwt.dto.CustomOAuth2User;
-import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.user.dto.request.UserNicknameUpdateRequest;
 import kr.ollsy.user.dto.response.UserResponse;
 import kr.ollsy.user.service.UserService;
