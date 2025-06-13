@@ -18,8 +18,8 @@ import kr.ollsy.auth.info.GoogleUserInfo;
 import kr.ollsy.auth.info.KakaoUserInfo;
 import kr.ollsy.auth.info.NaverUserInfo;
 import kr.ollsy.auth.info.OAuth2UserInfo;
-import kr.ollsy.auth.jwt.filter.JwtUtil;
 import kr.ollsy.auth.jwt.entity.RefreshToken;
+import kr.ollsy.auth.jwt.filter.JwtUtil;
 import kr.ollsy.auth.jwt.repository.RefreshTokenRepository;
 import kr.ollsy.global.exception.CustomException;
 import kr.ollsy.global.exception.GlobalExceptionCode;
@@ -47,8 +47,6 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
     @Value("${admin.email}")
     private String adminEmail;
 
-    private OAuth2UserInfo oAuth2UserInfo = null;
-
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -58,45 +56,32 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication; // 토큰
         final String provider = token.getAuthorizedClientRegistrationId(); // provider 추출
 
-        // 구글 || 카카오 || 네이버 로그인 요청
-        switch (provider) {
-            case "google" -> {
-                log.info("구글 로그인 요청");
-                oAuth2UserInfo = new GoogleUserInfo(token.getPrincipal().getAttributes());
-            }
-            case "kakao" -> {
-                log.info("카카오 로그인 요청");
-                oAuth2UserInfo = new KakaoUserInfo(token.getPrincipal().getAttributes());
-                System.out.print(token.getPrincipal().getAttributes());
-            }
-            case "naver" -> {
-                log.info("네이버 로그인 요청");
-                oAuth2UserInfo = new NaverUserInfo((Map<String, Object>) token.getPrincipal().getAttributes().get("response"));
-            }
-        }
+        OAuth2UserInfo oAuth2UserInfo = extractUserInfo(token, provider);
+        User user = userProcess(oAuth2UserInfo, provider);
 
-        // 정보 추출
-        String providerId = oAuth2UserInfo.getProviderId();
-        String name = oAuth2UserInfo.getName();
-        String email = oAuth2UserInfo.getEmail();
+        // 리프레쉬 토큰 발급 후 저장
+        String refreshToken = jwtUtil.generateRefreshToken(user.getId(), refreshTokenExpirationTime);
+        RefreshToken newRefreshToken = generateNewRefreshToken(user, refreshToken);
 
-        Optional<User> existUser = userRepository.findByEmail(email);
+        // 액세스 토큰 발급
+        String accessToken = jwtUtil.generateAccessToken(user.getId(), accessTokenExpirationTime);
+
+        //유저 정보 및 토큰을 담아 리다이렉트
+        sendRedirect(response, user, oAuth2UserInfo, refreshToken, accessToken);
+    }
+
+    private User userProcess(OAuth2UserInfo oAuth2UserInfo, String provider) {
+
+        Optional<User> existUser = userRepository.findByEmail(oAuth2UserInfo.getEmail());
         User user;
 
         if (!existUser.isPresent()) {
             // 신규 유저인 경우
-            log.info("신규 유저입니다. 등록을 진행합니다.");
+            log.info("신규 유저 등록을 진행합니다.");
 
-            user = User.builder()
-                    .name(name)
-                    .nickname(NicknameGenerator.generateNickname())
-                    .email(email)
-                    .role(email.equals(adminEmail) ? Role.ADMIN : Role.USER)
-                    .provider(provider)
-                    .providerId(providerId)
-                    .build();
-            userRepository.save(user);
+            user = createUser(provider, oAuth2UserInfo);
         } else {
+            user = existUser.get();
             // 기존 유저인 경우
             log.info("기존 유저입니다.");
 
@@ -106,33 +91,61 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
             }
 
             refreshTokenRepository.deleteByUserId(existUser.get().getId());
-            user = existUser.get();
         }
+        return user;
+    }
 
-        log.info("유저 이름 : {}", name);
-        log.info("유저 이름 : {}", email);
-        log.info("PROVIDER : {}", provider);
-        log.info("PROVIDER_ID : {}", providerId);
+    private User createUser(String provider, OAuth2UserInfo oAuth2UserInfo) {
+        User user = User.builder()
+                .name(oAuth2UserInfo.getName())
+                .nickname(NicknameGenerator.generateNickname())
+                .email(oAuth2UserInfo.getEmail())
+                .role(oAuth2UserInfo.getEmail().equals(adminEmail) ? Role.ADMIN : Role.USER)
+                .provider(provider)
+                .providerId(oAuth2UserInfo.getProviderId())
+                .build();
+        userRepository.save(user);
+        return user;
+    }
 
-        // 리프레쉬 토큰 발급 후 저장
-        String refreshToken = jwtUtil.generateRefreshToken(user.getId(), refreshTokenExpirationTime);
+    private OAuth2UserInfo extractUserInfo(OAuth2AuthenticationToken token, String provider) {
+        // 구글 || 카카오 || 네이버 로그인 요청
+        switch (provider) {
+            case "google" -> {
+                log.info("구글 로그인 요청");
+                return new GoogleUserInfo(token.getPrincipal().getAttributes());
+            }
+            case "kakao" -> {
+                log.info("카카오 로그인 요청");
+                return new KakaoUserInfo(token.getPrincipal().getAttributes());
+            }
+            case "naver" -> {
+                log.info("네이버 로그인 요청");
+                return new NaverUserInfo((Map<String, Object>) token.getPrincipal().getAttributes().get("response"));
+            }
+        }
+        return null;
+    }
 
+    private RefreshToken generateNewRefreshToken(User user, String refreshToken) {
         RefreshToken newRefreshToken = RefreshToken.builder()
                 .userId(user.getId())
                 .token(refreshToken)
                 .build();
         refreshTokenRepository.save(newRefreshToken);
+        return newRefreshToken;
+    }
 
-        // 액세스 토큰 발급
-        String accessToken = jwtUtil.generateAccessToken(user.getId(), accessTokenExpirationTime);
+    private void sendRedirect(HttpServletResponse response, User user, OAuth2UserInfo oAuth2UserInfo, String refreshToken, String accessToken) throws IOException {
+        {
+            String redirectUrl = "/oauth2-redirect.html" +
+                    "?accessToken=" + accessToken +
+                    "&refreshToken=" + refreshToken +
+                    "&userId=" + user.getId() +
+                    "&userName=" + URLEncoder.encode(oAuth2UserInfo.getName(), StandardCharsets.UTF_8) +
+                    "&email=" + URLEncoder.encode(oAuth2UserInfo.getEmail(), StandardCharsets.UTF_8);
 
-        //유저 정보 및 토큰을 담아 리다이렉트
-        String redirectUrl = "/oauth2-redirect.html" +
-                "?accessToken=" + accessToken +
-                "&refreshToken=" + refreshToken +
-                "&userId=" + user.getId() +
-                "&userName=" + URLEncoder.encode(name, StandardCharsets.UTF_8) +
-                "&email=" + URLEncoder.encode(email, StandardCharsets.UTF_8);
-        response.sendRedirect(redirectUrl);
+            response.sendRedirect(redirectUrl);
+        }
     }
 }

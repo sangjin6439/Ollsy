@@ -33,36 +33,20 @@ public class JwtFilter extends OncePerRequestFilter {
     private static final String JWT_HEADER_KEY = "Authorization";
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = resolveTokenFromRequest(request);
-            if (token == null) {
+            if (token == null) { //토큰이 필요없는 로그인 요청에서 사용
                 filterChain.doFilter(request, response);
                 return;
             }
             if (!jwtUtil.isTokenExpired(token)) {
                 Long userId = Long.valueOf(jwtUtil.getUserIdFromToken(token));
-
-                User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(GlobalExceptionCode.USER_NOT_FOUND));
-
-                UserOAuth2UserInfo userInfo = new UserOAuth2UserInfo(user);
-                CustomOAuth2User principal = new CustomOAuth2User(userInfo, user);
-
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                authenticateUserInfo(userId);
             }
             filterChain.doFilter(request, response);
-        } catch (CustomException e){
-            log.error("JwtFilter Error: {}", e.getErrorMessage());
-
-            response.setStatus(e.getHttpStatus().value());
-            response.setContentType("application/json;charset=UTF-8");
-
-            ExceptionResponse exceptionResponse = ExceptionResponse.of(e.getErrorCode(),e.getErrorMessage());
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(exceptionResponse);
-            response.getWriter().write(json);
+        } catch (CustomException e) {
+            sendUnauthorizedResponse(response, e);
         }
     }
 
@@ -73,5 +57,28 @@ public class JwtFilter extends OncePerRequestFilter {
             return token.substring(7);
         }
         return null;
+    }
+
+    private void authenticateUserInfo(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(GlobalExceptionCode.USER_NOT_FOUND));
+
+        UserOAuth2UserInfo userInfo = new UserOAuth2UserInfo(user);
+        CustomOAuth2User principal = new CustomOAuth2User(userInfo, user);
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+    }
+
+    private void sendUnauthorizedResponse(HttpServletResponse response, CustomException e) throws IOException {
+        log.error("JwtFilter Error: {}", e.getErrorMessage());
+
+        response.setStatus(e.getHttpStatus().value());
+        response.setContentType("application/json;charset=UTF-8");
+
+        ExceptionResponse exceptionResponse = ExceptionResponse.of(e.getErrorCode(), e.getErrorMessage());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(exceptionResponse);
+        response.getWriter().write(json);
     }
 }
