@@ -1,4 +1,4 @@
-package kr.ollsy.auth.jwt;
+package kr.ollsy.auth.jwt.service;
 
 import kr.ollsy.auth.jwt.dto.TokenResponse;
 

@@ -1,6 +1,8 @@
-package kr.ollsy.auth.jwt;
+package kr.ollsy.auth.jwt.repository;
 
 import jakarta.transaction.Transactional;
+import kr.ollsy.auth.jwt.entity.RefreshToken;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;

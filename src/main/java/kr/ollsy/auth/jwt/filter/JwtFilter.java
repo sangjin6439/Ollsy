@@ -1,4 +1,4 @@
-package kr.ollsy.auth.jwt;
+package kr.ollsy.auth.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

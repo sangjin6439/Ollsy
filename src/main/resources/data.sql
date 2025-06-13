@@ -6,7 +6,7 @@ INSERT INTO categories(category_id,name,parent_id,depth) value (5,'져지',1,1);
 INSERT INTO categories(category_id,name,parent_id,depth) value (6,'반바지',2,1);
 
 INSERT INTO item_images(item_image_id,url) value (1, 'https://ollsy.s3.ap-northeast-2.amazonaws.com/item-images57980b09-c8f0-4ecf-8291-37023925ecdd.png');
-INSERT INTO item_images(item_image_id,url) value (2, 'https://ollsy.s3.ap-northeast-2.amazonaws.com/item-images8dc89e2e-4517-4258-9ed5-c8cfbc261304.png');
+INSERT INTO item_images(item_image_id,url) value (2, 'https://ollsy.s3.ap-northeast-2.amazonaws.com/item-images53a45712-4c18-4005-aadb-31b66eed4143.png');
 INSERT INTO item_images(item_image_id,url) value (3, 'https://ollsy.s3.ap-northeast-2.amazonaws.com/item-images4c2c523e-525c-425d-899b-b376a0d99e6a.png');
 INSERT INTO item_images(item_image_id,url) value (4, 'https://ollsy.s3.ap-northeast-2.amazonaws.com/item-images5b0480b8-e737-4d43-aea5-5efb8e5f42e9.png');
 

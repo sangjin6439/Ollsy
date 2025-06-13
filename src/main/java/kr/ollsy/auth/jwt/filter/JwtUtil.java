@@ -1,4 +1,4 @@
-package kr.ollsy.auth.jwt;
+package kr.ollsy.auth.jwt.filter;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

@@ -14,8 +14,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Collections;
 
-import kr.ollsy.auth.jwt.JwtFilter;
-import kr.ollsy.auth.jwt.JwtUtil;
+import kr.ollsy.auth.jwt.filter.JwtFilter;
+import kr.ollsy.auth.jwt.filter.JwtUtil;
 import kr.ollsy.auth.loginHandler.OAuthLoginFailureHandler;
 import kr.ollsy.auth.loginHandler.OAuthLoginSuccessHandler;
 import kr.ollsy.global.exception.CustomAccessDeniedHandler;

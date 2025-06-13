@@ -1,4 +1,4 @@
-package kr.ollsy.auth.jwt;
+package kr.ollsy.auth.jwt.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
