@@ -35,25 +35,11 @@ public class OrderService {
     public OrderResponse createOrder(String providerId, OrderRequest orderRequest) {
 
         User user = userRepository.findByProviderId(providerId);
-        List<OrderItem> orderItemList = orderRequest.orderItemList().stream()
-                .map(orderItemRequest -> {
-                    Item item = itemRepository.findById(orderItemRequest.itemId())
-                            .orElseThrow(() -> new CustomException(GlobalExceptionCode.ITEM_NOT_FOUND));
-                    item.validateQuantity(orderItemRequest.quantity());
-                    item.removeStock(orderItemRequest.quantity());
-                    return OrderItem.of(item, orderItemRequest.quantity());
-                })
-                .collect(Collectors.toList());
+        List<OrderItem> orderItemList = getOrderItemList(orderRequest);
 
-        int totalPrice = orderItemList.stream()
-                .mapToInt(o -> o.getItem().getPrice() * o.getQuantity())
-                .sum();
+        int totalPrice = getTotalPrice(orderItemList);
 
-        Order order = Order.builder()
-                .user(user)
-                .orderItems(orderItemList)
-                .totalPrice(totalPrice)
-                .build();
+        Order order = getOrder(user, orderItemList, totalPrice);
 
         orderItemList.forEach(order::addOrderItem);
         user.addOrder(order);
@@ -67,6 +53,32 @@ public class OrderService {
                 .orderItemResponseList(orderItemResponseList)
                 .totalPrice(totalPrice)
                 .orderAt(order.getCreateAt())
+                .build();
+    }
+
+    private List<OrderItem> getOrderItemList(OrderRequest orderRequest) {
+        return orderRequest.orderItemList().stream()
+                .map(orderItemRequest -> {
+                    Item item = itemRepository.findById(orderItemRequest.itemId())
+                            .orElseThrow(() -> new CustomException(GlobalExceptionCode.ITEM_NOT_FOUND));
+                    item.validateQuantity(orderItemRequest.quantity());
+                    item.removeStock(orderItemRequest.quantity());
+                    return OrderItem.of(item, orderItemRequest.quantity());
+                })
+                .collect(Collectors.toList());
+    }
+
+    private int getTotalPrice(List<OrderItem> orderItemList) {
+        return orderItemList.stream()
+                .mapToInt(o -> o.getItem().getPrice() * o.getQuantity())
+                .sum();
+    }
+
+    private Order getOrder(User user, List<OrderItem> orderItemList, int totalPrice) {
+        return Order.builder()
+                .user(user)
+                .orderItems(orderItemList)
+                .totalPrice(totalPrice)
                 .build();
     }
 
@@ -98,11 +110,11 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public Page<OrderResponse> findOrders(String providerId, Pageable pageable) {
-        Page<Order> orderPage = orderRepository.findByUserProviderId(providerId,pageable);
+        Page<Order> orderPage = orderRepository.findByUserProviderId(providerId, pageable);
         return orderPage.map(this::toOderResponse);
     }
 
-    private OrderResponse toOderResponse(Order order){
+    private OrderResponse toOderResponse(Order order) {
         return OrderResponse.builder()
                 .id(order.getId())
                 .orderItemResponseList(orderItemListToDto(order.getOrderItems()))
