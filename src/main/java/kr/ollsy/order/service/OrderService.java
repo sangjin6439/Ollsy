@@ -59,7 +59,7 @@ public class OrderService {
     private List<OrderItem> getOrderItemList(OrderRequest orderRequest) {
         return orderRequest.orderItemList().stream()
                 .map(orderItemRequest -> {
-                    Item item = itemRepository.findById(orderItemRequest.itemId())
+                    Item item = itemRepository.findByIdWithPessimisticLock(orderItemRequest.itemId())
                             .orElseThrow(() -> new CustomException(GlobalExceptionCode.ITEM_NOT_FOUND));
                     item.validateQuantity(orderItemRequest.quantity());
                     item.removeStock(orderItemRequest.quantity());
