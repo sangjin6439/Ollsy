@@ -35,13 +35,13 @@
 <img width="800" alt="Image" src="https://github.com/user-attachments/assets/0668f4f8-a267-4674-96dd-40402ef441ea" />
 
 ## 📗사용 기술 및 개발 환경
-프론트엔드
+FrontEnd
 
 <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white">
 <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white">
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white">
 
-백엔드
+BackEnd
 
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=OpenJDK&logoColor=white">
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
